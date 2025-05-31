@@ -1,0 +1,102 @@
+{
+  "Me": {
+    "menu": {
+      "profile": "Mon profil",
+      "settings": "Paramètres",
+      "help": "Aide et support",
+      "logout": "Déconnexion"
+    },
+    "MyProfile": {
+      "title": "Mon compte",
+      "meta_title": "Mon compte",
+      "meta_description": "Consultez et modifiez vos informations personnelles"
+    },
+    "MySettings": {
+      "title": "Paramètres",
+      "meta_title": "Paramètres",
+      "meta_description": "Modifiez vos paramètres de compte et de sécurité."
+    }
+  },
+  "Auth": {
+    "SignIn": {
+      "title": "Connexion",
+      "meta_title": "Connexion",
+      "meta_description": "Connectez-vous à votre compte avec facilité.",
+      "text": "Content de vous revoir ! <br></br>Veuillez saisir votre email pour vous connecter",
+      "fields": {
+        "email": {
+          "label": "Adresse e-mail",
+          "placeholder": "Entrez votre adresse e-mail",
+          "errors": {
+            "required": "Veuillez renseigner votre adresse e-mail pour continuer.",
+            "invalid": "L'adresse e-mail saisie n'est pas valide. Veuillez vérifier le format (ex. prenom.nom@domaine.com).",
+            "notExist": "Aucun compte n'est associé à cette adresse e-mail. Veuillez vérifier ou en créer un nouveau."
+          }
+        },
+        "keepMeLogged": {
+          "label": "Rester connecté"
+        }
+      },
+      "buttons": {
+        "submit": "Se connecter",
+        "submitting": "Connexion...",
+        "signIn": "Connectez-vous",
+        "signInWithGoogle": "Se connecter avec Google",
+        "or": "OU"
+      },
+      "footer": {
+        "noAccount": "Pas encore de compte ?",
+        "signUp": "Inscrivez-vous"
+      },
+      "errors": {
+        "invalidCredentials": "Identifiants invalides. Veuillez vérifier votre adresse e-mail et réessayer ultérieurement.",
+        "serverError": "Une erreur est survenue lors de la tentative connexion. Veuillez réessayer plus tard."
+      }
+    },
+    "SignUp": {
+      "meta_title": "S'inscrire",
+      "meta_description": "Créez un compte facilement grâce à notre processus d'inscription intuitif."
+    }
+  },
+  "Dashboard": {
+    "meta_title": "Tableau de bord",
+    "welcome_message": "Bonjour {firstname}!",
+    "alternative_message": "Vous voulez créer votre SaaS plus rapidement en utilisant la même stack ? Essayez <url></url>."
+  },
+  "Navigation": {
+    "title": "Tableau de bord",
+    "dashboard": {
+      "dashboard": "Tableau de bord",
+      "tasks": "Tâches",
+      "settings": "Paramètres",
+      "support": "Support",
+      "humanResources": "Ressources humaines",
+      "employees": "Employés",
+      "activities": "Activités",
+      "overtime": "Heures supplémentaires",
+      "payroll": "Paie",
+      "salesAndClients": "Ventes et clients",
+      "invoices": "Factures",
+      "quotes": "Devis",
+      "clients": "Clients",
+      "purchasesAndSuppliers": "Achats et fournisseurs",
+      "purchases": "Achats",
+      "orders": "Commandes",
+      "suppliers": "Fournisseurs",
+      "stocks": "Stocks",
+      "user": {
+        "signOut": "Déconnexion"
+      },
+      "organization": {
+        "switchOrganization": "Vos organisations",
+        "addOrganization": "Ajouter une organisation"
+      }
+    }
+  },
+  "Organization": {
+    "title": "Organisation",
+    "meta_title": "Organisation",
+    "meta_description": "Gérez votre organisation et vos utilisateurs.",
+    "add_organization": "Ajouter une organisation"
+  }
+}

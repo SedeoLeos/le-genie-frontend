@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "./_variables.scss";
+@import "./_keyframe-animations.scss"; 
 
 :root {
   --background: #ffffff;
