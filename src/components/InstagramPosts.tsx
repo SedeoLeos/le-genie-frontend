@@ -21,7 +21,8 @@ const InstagramPosts = () => {
         {/* Knowledge Sharing Section */}
         <div className="bg-gray-900 dark:bg-white rounded-lg p-6 md:p-8 text-center mb-8">
           <h2 className="text-xl md:text-2xl font-bold text-white dark:text-gray-900 mb-4">Share Your Knowledge With Our Readers</h2>
-          <button className="px-4 md:px-6 py-2 md:py-3 rounded-lg text-white dark:text-gray-900 font-medium hover:opacity-90 transition-opacity text-sm md:text-base bg-white dark:bg-gray-900" >
+          <button className="px-4 md:px-6 py-2 md:py-3 rounded-lg dark:text-white text-gray-900 
+          font-medium hover:opacity-90 transition-opacity text-sm md:text-base bg-white dark:bg-gray-900 border-2 border-gray-200" >
             📝 Write On Notebook
           </button>
         </div>
