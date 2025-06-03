@@ -1,10 +1,10 @@
 import type { LocalePrefixMode } from 'next-intl/routing';
 
-const localePrefix: LocalePrefixMode = 'as-needed';
+const localePrefix: LocalePrefixMode = 'always';
 
 // FIXME: Update this configuration file based on your project information
 export const AppConfig = {
-    name: 'Focus Pro',
+    name: 'Le Genie Pro',
     locales: ['fr'],
     defaultLocale: 'fr',
     localePrefix,

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import EditIcon from './edit';
 import Logo from './ui/logo';
 import { useUser } from '@/features/auth/hooks/useAuth';
-import { useRouter } from '@/libs/i18nNavigation';
+import { Link, useRouter } from '@/libs/i18nNavigation';
 
 const Header = () => {
   const router = useRouter();
@@ -17,7 +17,7 @@ const Header = () => {
          
           
           <nav className="hidden md:flex items-center space-x-6">
-            <a href="#" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Homepage</a>
+            <Link href="/" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Homepage</Link>
             <a href="#" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors">About</a>
             <div className="relative">
               <a href="#" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors flex items-center">

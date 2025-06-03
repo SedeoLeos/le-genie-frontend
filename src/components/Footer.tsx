@@ -22,7 +22,7 @@ const Footer = () => {
 
             {/* Blogs */}
             <div className="text-center md:text-left">
-              <h3 className="text-white font-semibold mb-4">Blogs</h3>
+              <h3 className="text-white font-semibold dark:text-gray-900 mb-4">Blogs</h3>
               <ul className="space-y-2 text-sm text-gray-400 dark:text-gray-900">
                 <li><a href="#" className="hover:text-white dark:hover:text-gray-900 transition-colors">About</a></li>
                 <li><a href="#" className="hover:text-white dark:hover:text-gray-900 transition-colors">Technology</a></li>
@@ -34,7 +34,7 @@ const Footer = () => {
 
             {/* Quick Links */}
             <div className="text-center md:text-left">
-              <h3 className="text-white font-semibold mb-4">Quick Links</h3>
+              <h3 className="text-white dark:text-gray-900 font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2 text-sm text-gray-400 dark:text-gray-900">
                 <li><a href="#" className="hover:text-white dark:hover:text-gray-900 transition-colors">Homepage</a></li>
                 <li><a href="#" className="hover:text-white dark:hover:text-gray-900 transition-colors">Terms & Conditions</a></li>
@@ -52,7 +52,7 @@ const Footer = () => {
                   placeholder="Your Email"
                   className="!bg-transparent focus-visible:ring-0 !border-0  focus-visible:ring-offset-0  focus-visible:outline-0 text-white dark:text-white placeholder-gray-400 dark:placeholder-gray-600 rounded-none"
                 />
-                <Button className=" dark:bg-[#666666] bg-gray-900 p-2 dark:text-white  text-white dark:hover:bg-gray-100 hover:bg-gray-900 rounded-none rounded-r-sm ">
+                <Button className=" dark:bg-[#666666] bg-gray-900 p-2 dark:text-white  text-white dark:hover:bg-gray-950 hover:bg-gray-900 rounded-none rounded-r-sm ">
                   Subscribe
                 </Button>
               </div>

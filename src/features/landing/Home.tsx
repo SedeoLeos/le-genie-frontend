@@ -1,7 +1,6 @@
 
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import FeaturedSection from '@/components/FeaturedSection';
 import Sidebar from '@/components/Sidebar';
 import RecentPosts from '@/components/RecentPosts';
 import InstagramPosts from '@/components/InstagramPosts';
