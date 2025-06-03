@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast'
 import { useRouter } from '@/libs/i18nNavigation'
 let oauthWindow: Window | null = null;
 function Login() {
+  const [loadingProvider, setLoadingProvider] = React.useState<null | 'GOOGLE' | 'GITHUB'>(null);
   const { toast } = useToast();
   const router = useRouter();
   const login = async (provider: 'GOOGLE' | 'GITHUB', code: string) => {
@@ -39,6 +40,7 @@ function Login() {
   }, [router]);
 
   function startOAuth(provider: 'GOOGLE' | 'GITHUB') {
+    setLoadingProvider(provider);
     let oauthUrl = '';
     const state = provider;
 
@@ -73,25 +75,39 @@ function Login() {
     } else {
       oauthWindow = window.open(oauthUrl, 'OAuthLogin', options);
     }
+    // Facultatif : tu peux remettre loadingProvider à null après un délai ou une action précise
+    // setTimeout(() => setLoadingProvider(null), 2000);
   }
 
   return (
     <div className='flex dark:bg-gray-100 bg-gray-900 h-screen'>
-      <div className="flex flex-col justify-center w-1/3 dark:bg-gray-900 bg-gray-100 p-10">
+      <div className="flex flex-col justify-center w-1/3 min-w-[400px] dark:bg-gray-900 bg-gray-100 p-10">
         <Logo />
 
         <div className='flex flex-1 items-center justify-center  w-full'>
           <div className='flex flex-col gap-10 p-10 w-full'>
             <Button
               onClick={() => startOAuth('GOOGLE')}
-              className='dark:bg-white dark:text-gray-900 bg-gray-900 text-white w-full py-8 text-lg font-bold cursor-pointer'>
-              <GlobeIcon className='w-8 h-8' />
-              Login with Google</Button>
+              disabled={!!loadingProvider}
+              className='dark:bg-white dark:text-gray-900 bg-gray-900 text-white w-full py-8 text-lg font-bold cursor-pointer flex items-center justify-center gap-2'>
+              {loadingProvider === 'GOOGLE' ? (
+                <span className="animate-spin rounded-full h-6 w-6 border-2 border-t-2 border-gray-300 border-t-gray-900 mr-2"></span>
+              ) : (
+                <GlobeIcon className='w-8 h-8' />
+              )}
+              {loadingProvider === 'GOOGLE' ? 'Connexion...' : 'Login with Google'}
+            </Button>
             <Button
               onClick={() => startOAuth('GITHUB')}
-              className='dark:bg-white dark:text-gray-900 bg-gray-900 text-white  w-full py-8 text-lg font-bold cursor-pointer'>
-              <GithubIcon className='w-8 h-8' />
-              Login with GitHub</Button>
+              disabled={!!loadingProvider}
+              className='dark:bg-white dark:text-gray-900 bg-gray-900 text-white  w-full py-8 text-lg font-bold cursor-pointer flex items-center justify-center gap-2'>
+              {loadingProvider === 'GITHUB' ? (
+                <span className="animate-spin rounded-full h-6 w-6 border-2 border-t-2 border-gray-300 border-t-gray-900 mr-2"></span>
+              ) : (
+                <GithubIcon className='w-8 h-8' />
+              )}
+              {loadingProvider === 'GITHUB' ? 'Connexion...' : 'Login with GitHub'}
+            </Button>
           </div>
         </div>
 
