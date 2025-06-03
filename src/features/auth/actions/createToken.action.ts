@@ -19,13 +19,13 @@ export const createToken = safeAction.inputSchema(inputSchema).action(async ({ p
     });
 
     if (!res.ok) {
-        console.error('Erreur callback',JSON.stringify(res,null,2));
+        console.error('Erreur callback', JSON.stringify(res, null, 2));
         return returnValidationErrors(inputSchema, { _errors: ["Incorrect credentials"] });
 
     }
 
     const { accessToken, refreshToken } = await res.json();
-
+    
     const cookieStore = await cookies();
     const maxAge = 60 * 60 * 24 * 7;
 
@@ -33,7 +33,7 @@ export const createToken = safeAction.inputSchema(inputSchema).action(async ({ p
         httpOnly: true,
         secure: Env.NODE_ENV === 'production',
         path: '/',
-        maxAge,
+        maxAge: maxAge * 4,
         sameSite: 'lax',
     });
 
