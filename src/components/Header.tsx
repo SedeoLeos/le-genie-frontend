@@ -1,10 +1,14 @@
-
+'use client'
 import { Search, User, Bell, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import EditIcon from './edit';
 import Logo from './ui/logo';
+import { useUser } from '@/features/auth/hooks/useAuth';
+import { useRouter } from '@/libs/i18nNavigation';
 
 const Header = () => {
+  const router = useRouter();
+  const { user } = useUser();
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -46,12 +50,18 @@ const Header = () => {
             En
           </Button>
           <Bell className="w-5 h-5 text-gray-500 dark:text-white cursor-pointer hover:text-gray-900 dark:hover:text-gray-200 transition-colors" />
-          <div className="w-8 h-8 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center">
-            <User className="w-4 h-4 text-gray-600 dark:text-white" />
-          </div>
-          <Button variant="ghost" size="sm" className="md:hidden">
-            <Menu className="w-5 h-5" />
-          </Button>
+          {user ? (
+            <div className="w-8 h-8 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center">
+              <User className="w-4 h-4 text-gray-600 dark:text-white" />
+            </div>
+          ) : (
+            <Button variant="ghost" size="sm" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200" onClick={() => router.push('/auth/sign-in')}>
+              Se connecter
+            </Button>
+          )}
+           <Button variant="ghost" size="sm" className="md:hidden">
+              <Menu className="w-5 h-5" />
+            </Button>
         </div>
       </div>
     </header>

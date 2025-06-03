@@ -1,59 +1,68 @@
+// middleware.ts
 import type { NextRequest } from 'next/server';
-import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
-import { routing } from '@/libs/i18nNavigation';
+import createMiddleware from 'next-intl/middleware';
 import { createRouteMatcher } from '@/utils/Helpers';
+import { verifyAccessToken } from '@/libs/auth/jwt'; // utilitaire pour vérifier le JWT
+import { routing } from '@/libs/i18nNavigation';
 
 const intlMiddleware = createMiddleware(routing);
 
 const isProtectedRoute = createRouteMatcher([
-    '/dashboard(.*)',
-    '/post/:post/edit',
-    '/me(.*)',
+  '/dashboard(.*)',
+  '/post/:post/edit',
+  '/me(.*)',
 ]);
-
 const isAuthPage = createRouteMatcher(['/auth(.*)', '/:locale/auth(.*)']);
 
 export default async function middleware(request: NextRequest) {
-    const locale =
-        request.nextUrl.pathname.match(/(\/.*)/)?.at(1) ?? '';
-    const signInUrl = new URL(`${locale}/sign-in`, request.url);
-    const landingUrl = new URL(`${locale}`, request.url);
-    console.log('locale', locale);
+  const { pathname } = request.nextUrl;
 
-    // if (isAuthPage(request) || isProtectedRoute(request)) {
-    //     return (async (req) => {
-    //         if (isProtectedRoute(req)) {
-    //             // Simulate protection behavior
-    //             const isAuthenticated = true; // Replace with your own authentication logic
-    //             if (!isAuthenticated) {
-    //                 return NextResponse.redirect(signInUrl.toString());
-    //             }
-    //         }
+  // 1. Laisser passer sitemap.xml / robots.txt sans authentification
+  if (pathname === '/sitemap.xml' || pathname === '/robots.txt') {
+    return NextResponse.next();
+  }
 
-    //         return intlMiddleware(req);
-    //     })(request);
-    // }
+  // 2. Si c'est une page d'auth ou une route protégée, on vérifie le JWT
+  const matchAuth = isAuthPage(request);
+  const matchProtected = isProtectedRoute(request);
 
-    // Extract the URL pathname from the request
-    const path = request.nextUrl.pathname;
+  if (matchAuth || matchProtected) {
+    // Extraction du cookie "access_token" (JWT)
+    const accessToken = request.cookies.get('access_token')?.value;
 
-    // Allow direct access to sitemap.xml and robots.txt without i18n middleware processing
-    // This ensures these files are properly served for SEO purposes
-    if (path === '/sitemap.xml' || path === '/robots.txt') {
-        return NextResponse.next();
+    // Si on est sur une route protégée et qu’il n’y a pas de token → redirection vers /sign-in
+    if (matchProtected && !accessToken) {
+      const locale = request.nextUrl.pathname.match(/^(\/[^\/]+)/)?.[1] || '';
+      const signInUrl = new URL(`${locale}/sign-in`, request.url);
+      return NextResponse.redirect(signInUrl);
     }
 
-   
+    // Si on a un cookie, on vérifie le JWT
+    if (accessToken) {
+      try {
+        // Si le verify échoue, on catchera et redirigera plus bas
+        await verifyAccessToken(accessToken);
+      } catch {
+        // Token invalide ou expiré → suppression et redirection vers /sign-in
+        const response = NextResponse.redirect(
+          new URL(`${(pathname.match(/^(\/[^\/]+)/)?.[1] || '')}/sign-in`, request.url)
+        );
+        response.cookies.delete('access_token');
+        return response;
+      }
+    }
+  }
 
-    return intlMiddleware(request);
+  // 3. Lancer next-intl pour le reste des routes (multilingue, etc.)
+  return intlMiddleware(request);
 }
 
 export const config = {
-    matcher: [
-        // Skip Next.js internals and all static files, unless found in search params
-        '/((?!_next|monitoring|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-        // Always run for API routes
-        '/(api|trpc)(.*)',
-    ],
+  matcher: [
+    // On évite _next, fichiers statiques, etc.
+    '/((?!_next|monitoring|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Toujours exécuter pour API routes
+    '/(api|trpc)(.*)',
+  ],
 };

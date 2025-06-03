@@ -8,10 +8,14 @@ export const Env = createEnv({
         BOG_API_BASE_URL: z.string(),
     },
     client: {
+        NEXT_PUBLIC_BOG_API_BASE_URL: z.string(),
         NEXT_PUBLIC_APP_URL: z.string().optional(),
         NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
         NEXT_PUBLIC_POSTHOG_HOST: z.string().optional(),
         NEXT_PUBLIC_RECAPTCHA_CLIENT_ID: z.string(),
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string(),
+        NEXT_PUBLIC_GITHUB_CLIENT_ID: z.string(),
+        NEXT_PUBLIC_REDIRECT_URI: z.string(),
     },
     shared: {
         NODE_ENV: z.enum(['test', 'development', 'production']).optional(),
@@ -27,5 +31,9 @@ export const Env = createEnv({
         NEXT_PUBLIC_RECAPTCHA_CLIENT_ID:
             process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_ID,
         BOG_API_BASE_URL: process.env.BOG_API_BASE_URL,
+        NEXT_PUBLIC_BOG_API_BASE_URL: process.env.NEXT_PUBLIC_BOG_API_BASE_URL,
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+        NEXT_PUBLIC_GITHUB_CLIENT_ID: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID,
+        NEXT_PUBLIC_REDIRECT_URI: process.env.NEXT_PUBLIC_REDIRECT_URI,
     },
 });
