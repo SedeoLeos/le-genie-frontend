@@ -1,10 +1,10 @@
-// app/api/auth/me/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAccessToken, JwtPayload } from '@/libs/auth/jwt';
+import { verifyAccessToken, JwtPayload } from '@/libs/auth/jwt'; 
+import { getUserById } from '@/features/auth/actions/get-user.action';
 
 export async function GET(req: NextRequest) {
     const accessToken = req.cookies.get('access_token')?.value;
-    console.log("accessToken",accessToken);
+
     if (!accessToken) {
         return NextResponse.json({ user: null }, { status: 401 });
     }
@@ -12,18 +12,27 @@ export async function GET(req: NextRequest) {
     let payload: JwtPayload;
     try {
         payload = verifyAccessToken(accessToken);
-    } catch {
+
+        if (!payload.sub || !payload.email) {
+            throw new Error('Invalid token payload');
+        }
+    } catch (error) {
+        console.error('Token verification failed:', error.message);
         return NextResponse.json({ user: null }, { status: 401 });
     }
-    console.log(payload);
 
-    // On renvoie uniquement les champs utiles au client
-    const user = {
-        sub: payload.sub,
-        email: payload.email,
-        name: payload.name,
-        picture: payload.picture,
-    };
+    const user = await getUserById();
 
-    return NextResponse.json({ user });
+    if (!user) {
+        return NextResponse.json({ user: null }, { status: 404 });
+    }
+
+    return NextResponse.json({
+        user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            picture: user.picture,
+        },
+    });
 }

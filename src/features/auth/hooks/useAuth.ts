@@ -1,4 +1,3 @@
-// /libs/hooks/useUser.ts
 import { useState, useEffect } from 'react';
 
 export interface User {
