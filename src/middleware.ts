@@ -3,59 +3,89 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { createRouteMatcher } from '@/utils/Helpers';
-import { verifyAccessToken } from '@/libs/auth/jwt'; // utilitaire pour vérifier le JWT
 import { routing } from '@/libs/i18nNavigation';
+import { Env } from './libs/Env';
 
 const intlMiddleware = createMiddleware(routing);
 
 const isProtectedRoute = createRouteMatcher([
-  '/dashboard(.*)',
-  '/post/:post/edit',
-  '/me(.*)',
+  '/:locale/post/:post/edit',
+  '/:locale/me(.*)',
 ]);
 const isAuthPage = createRouteMatcher(['/auth(.*)', '/:locale/auth(.*)']);
 
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Laisser passer sitemap.xml / robots.txt sans authentification
+  // 1. Autoriser certains fichiers publics
   if (pathname === '/sitemap.xml' || pathname === '/robots.txt') {
     return NextResponse.next();
   }
 
-  // 2. Si c'est une page d'auth ou une route protégée, on vérifie le JWT
-  const matchAuth = isAuthPage(request);
   const matchProtected = isProtectedRoute(request);
 
-  if (matchAuth || matchProtected) {
-    // Extraction du cookie "access_token" (JWT)
-    const accessToken = request.cookies.get('access_token')?.value;
+  const accessToken = request.cookies.get('access_token')?.value;
+  const refreshToken = request.cookies.get('refresh_token')?.value;
+  const locale = pathname.match(/^(\/[^\/]+)/)?.[1] || '';
 
-    // Si on est sur une route protégée et qu’il n’y a pas de token → redirection vers /sign-in
-    if (matchProtected && !accessToken) {
-      const locale = request.nextUrl.pathname.match(/^(\/[^\/]+)/)?.[1] || '';
-      const signInUrl = new URL(`${locale}/sign-in`, request.url);
-      return NextResponse.redirect(signInUrl);
-    }
-
-    // Si on a un cookie, on vérifie le JWT
-    if (accessToken) {
-      try {
-        // Si le verify échoue, on catchera et redirigera plus bas
-        await verifyAccessToken(accessToken);
-      } catch {
-        // Token invalide ou expiré → suppression et redirection vers /sign-in
-        const response = NextResponse.redirect(
-          new URL(`${(pathname.match(/^(\/[^\/]+)/)?.[1] || '')}/sign-in`, request.url)
-        );
-        response.cookies.delete('access_token');
-        return response;
-      }
+  // 2. Tentative de refresh si pas d'access_token et refresh_token présent
+  if (!accessToken  && refreshToken) {
+    const response = await tryRefreshToken(refreshToken);
+    if (response) {
+      return response;
     }
   }
 
-  // 3. Lancer next-intl pour le reste des routes (multilingue, etc.)
+  // 3. Si page protégée et toujours pas d'access_token → redirection
+  if (matchProtected && !accessToken) {
+    const redirectUrl = new URL(`${locale}/auth/sign-in`, request.url);
+    const res = NextResponse.redirect(redirectUrl);
+    res.cookies.delete('access_token');
+    res.cookies.delete('refresh_token');
+    return res;
+  }
+
+  // 4. Laisser passer tout le reste
   return intlMiddleware(request);
+}
+async function tryRefreshToken(refreshToken: string): Promise<NextResponse | null> {
+  try {
+    const refreshRes = await fetch(`${Env.BOG_API_BASE_URL}auth/refresh-token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${refreshToken}`
+      },
+
+    });
+
+    if (!refreshRes.ok) return null;
+    console.log("refreshRes",refreshRes);
+
+    const { accessToken: newAccessToken, refreshToken: newRefreshToken } = await refreshRes.json();
+    const response = NextResponse.next();
+
+    response.cookies.set('access_token', newAccessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 15 * 60,
+    });
+    const maxAge = 60 * 60 * 24 * 7;
+    response.cookies.set('refresh_token', newRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      path: '/',
+      maxAge,
+    });
+
+    return response;
+  } catch (err) {
+    console.error('[middleware] Refresh token failed:', err);
+    return null;
+  }
 }
 
 export const config = {

@@ -1,18 +1,16 @@
-import { ContentManager } from "@/components/tiptap-templates/simple/simple-editor"
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { getPost } from "@/features/post/edit-post/actions/get-post.action";
+import EditPost from "@/features/post/edit-post/EditPost";
+import { redirect } from "@/libs/i18nNavigation";
 
-export default function EditPost() {
-  return <div className="flex flex-col gap-5">
-    <div className="flex justify-end">
+export default async function EditPage({ params }: { params: Promise<{ slug: string }> }) {
+  const paramsData = await params;
+  const result = await getPost({ id: paramsData.slug });
+  
+    if (!result.data?.success || !result.data.post) {
+      return redirect({ href: "/", locale: "fr" });
+    }
+  return <EditPost post={result.data.post} />
 
-      <Button variant={'ghost'}>Sauvegarder</Button>
-    </div>
-    <div className="h-40 w-full bg-gray-400 border-2 border-gray-600 rounded-lg cursor-pointer">
 
-      <Input type="file"  className="hideen"/>
-    </div>
-    <Input />
-    <ContentManager content={""} viewer={false} />
-  </div>
 }
+

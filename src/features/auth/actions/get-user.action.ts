@@ -2,11 +2,16 @@
 import { cookies } from "next/headers";
 import { fetchWithRetry } from "./retry.action";
 import { Env } from "@/libs/Env";
-
-export async function getUserById() {
+interface UserI {
+    id: string;
+    email: string;
+    name: string;
+    avatarPath: string;
+}
+export async function getUser() {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get("access_token")?.value;
-    const response = await fetchWithRetry(`${Env.BOG_API_BASE_URL}/users/me`, {
+    const response = await fetchWithRetry(`${Env.BOG_API_BASE_URL}auth/me`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -14,5 +19,8 @@ export async function getUserById() {
         },
     });
     const data = await response.json();
-    return data;
+    if (!response.ok) {
+        return null;
+    }
+    return data as UserI;
 }

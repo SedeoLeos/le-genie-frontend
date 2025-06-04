@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Noto_Sans, Noto_Sans_Mono } from "next/font/google";
+import { Noto_Sans, Noto_Sans_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -9,16 +9,6 @@ import { routing } from '@/libs/i18nNavigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
   subsets: ["latin"],
@@ -86,9 +76,9 @@ export default async function RootLayout(
         <PostHogProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <TooltipProvider>
+              {props.children}
               <Toaster />
               <Sonner />
-              {props.children}
             </TooltipProvider>
           </NextIntlClientProvider>
         </PostHogProvider>

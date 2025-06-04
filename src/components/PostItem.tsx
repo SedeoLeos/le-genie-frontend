@@ -1,27 +1,29 @@
 import { Badge } from "@/components/ui/badge";
+import { PostResponseDto } from "@/features/post/type";
 import { Link } from "@/libs/i18nNavigation";
+import { getTiptapTextFromJSON } from "@/libs/tiptap/util";
 import { Calendar, Eye } from "lucide-react";
+import Image from "next/image";
 
-type PostItemType = {
-    id: string,
-    image: string;
-    title: string;
-    postTags: string[];
-    createdAt: Date;
-    description: string
-}
+
+
 type PostItemProps = {
-    post: PostItemType
+    post: PostResponseDto
 }
 const PostItem = (props: PostItemProps) => {
     const { post } = props;
     return (<Link key={post.id} href={'/post/' + post.id} className="flex flex-col sm:flex-row bg-white dark:bg-gray-900  overflow-hidden">
         <div className="w-full sm:w-48 flex-shrink-0 overflow-hidden">
-            <img
-                src={post.image}
+            {post.imagePath && <Image
+                src={post.imagePath}
                 alt={post.title}
+                fill
                 className="w-full h-48 sm:h-full object-cover"
-            />
+            />}
+
+            {!post.imagePath && <div
+                className="w-full h-48 sm:h-full object-cover bg-amber-50"
+            ></div>}
         </div>
         <div className="p-4 md:p-6 flex-1">
             {
@@ -38,7 +40,7 @@ const PostItem = (props: PostItemProps) => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 text-gray-500 dark:text-white text-sm mb-3">
                 {post.createdAt && <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-1" />
-                    { post.createdAt.toLocaleDateString()}
+                    {post.createdAt.toLocaleDateString()}
                 </div>}
                 {post.createdAt && <div className="flex items-center">
                     <Eye className="w-4 h-4 mr-1" />
@@ -46,7 +48,7 @@ const PostItem = (props: PostItemProps) => {
                 </div>}
             </div>
             <p className="text-gray-600 dark:text-white text-sm line-clamp-2">
-                {post.description}
+                {getTiptapTextFromJSON(post.content)}
             </p>
         </div>
     </Link>)

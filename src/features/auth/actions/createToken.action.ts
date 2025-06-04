@@ -33,7 +33,7 @@ export const createToken = safeAction.inputSchema(inputSchema).action(async ({ p
         httpOnly: true,
         secure: Env.NODE_ENV === 'production',
         path: '/',
-        maxAge: maxAge * 4,
+        maxAge: 15 * 60,
         sameSite: 'lax',
     });
 
@@ -41,7 +41,7 @@ export const createToken = safeAction.inputSchema(inputSchema).action(async ({ p
         httpOnly: true,
         secure: Env.NODE_ENV === 'production',
         path: '/',
-        maxAge: maxAge * 4,
+        maxAge: maxAge,
         sameSite: 'lax',
     });
     return { success: true };

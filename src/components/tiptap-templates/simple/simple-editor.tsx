@@ -74,8 +74,8 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss"
 
-import content from "@/components/tiptap-templates/simple/data/content.json"
 import { useAtom } from "jotai"
+import { tryParseJSON } from "@/libs/tiptap/util"
 
 const MainToolbarContent = ({
   onHighlighterClick,
@@ -183,9 +183,10 @@ const MobileToolbarContent = ({
 )
 export type ContentManagerProps = {
   content: string,
-  viewer?: boolean
+  viewer?: boolean,
+
 }
-export function ContentManager({ viewer = false }: ContentManagerProps) {
+export const ContentManager = React.forwardRef(({ viewer = false, content }: ContentManagerProps, ref) => {
   const isMobile = useMobile()
   const windowSize = useWindowSize()
   const [mobileView, setMobileView] = React.useState<
@@ -229,9 +230,9 @@ export function ContentManager({ viewer = false }: ContentManagerProps) {
       TrailingNode,
       Link.configure({ openOnClick: false }),
     ],
-    content: content,
+    content: tryParseJSON(content),
   })
-
+  React.useImperativeHandle(ref, () => ({ editor }), [editor])
   const bodyRect = useCursorVisibility({
     editor,
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
@@ -280,4 +281,5 @@ export function ContentManager({ viewer = false }: ContentManagerProps) {
       </div>
     </EditorContext.Provider>
   )
-}
+})
+ContentManager.displayName = 'ContentManager'

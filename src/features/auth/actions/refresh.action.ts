@@ -9,7 +9,7 @@ export async function refreshToken() {
 
     if (!currentRefreshToken) return { error: "No refresh token available" };
 
-    const res = await fetch(`${Env.BOG_API_BASE_URL}auth/refresh/`, {
+    const res = await fetch(`${Env.BOG_API_BASE_URL}auth/refresh-token/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -21,7 +21,7 @@ export async function refreshToken() {
 
     const { accessToken, refreshToken } = await res.json();
 
-    const maxAge = 60 * 60 * 24 * 7; // 7 jours
+    const maxAge = 60 * 60 * 24 * 7;
     cookieStore.set('access_token', accessToken, {
         httpOnly: true,
         secure: Env.NODE_ENV === 'production',

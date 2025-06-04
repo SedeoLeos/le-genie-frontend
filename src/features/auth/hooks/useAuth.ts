@@ -1,29 +1,24 @@
 import { useState, useEffect } from 'react';
+import { getUser } from '../actions/get-user.action';
 
-export interface User {
-  sub: string;
-  email?: string;
-  name?: string;
-  picture?: string;
-}
+type User = Awaited<ReturnType<typeof getUser>>;
 
 /**
  * Hook React pour récupérer l'utilisateur connecté.
  * Il fait un GET sur `/api/auth/me` et met à jour l'état `user`.
  */
 export function useUser() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await fetch('/api/auth/me');
-        if (!res.ok) {
+        const user = await getUser();
+        if (!user) {
           setUser(null);
         } else {
-          const data = await res.json();
-          setUser(data.user);
+          setUser(user);
         }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_error) {
