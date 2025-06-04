@@ -9956,7 +9956,7 @@ __metadata:
     next: "npm:15.3.3"
     next-intl: "npm:^3.26.5"
     next-mdx-remote-client: "npm:^2.1.2"
-    next-safe-action: "npm:^8.0.0"
+    next-safe-action: "npm:^8.0.1"
     next-themes: "npm:^0.3.0"
     npm-run-all2: "npm:^7.0.2"
     pino: "npm:^9.6.0"
@@ -11438,14 +11438,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-safe-action@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "next-safe-action@npm:8.0.0"
+"next-safe-action@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "next-safe-action@npm:8.0.1"
   peerDependencies:
     next: ">= 14.0.0"
     react: ">= 18.2.0"
     react-dom: ">= 18.2.0"
-  checksum: 10c0/46716d51dc7bec429d616054aa3efe461abcfc06c92b834869c7c1060b531530c06da870472f571c37bf9964cf4c5f3c5b0ed14344f9db11cd098ab513a02e5b
+  checksum: 10c0/7dc686d68b08e502a5fba45c21eaae0cc21c0eb38d2db9161e3ca5772ad7cbc8eb276de11f37fc3ff3ed15679896cf9c554ed360a4ae7a7afe42c39de1f6e9bb
   languageName: node
   linkType: hard
 

@@ -6,22 +6,22 @@ import UploadImages from "@/components/ui/upload-images"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRef } from "react"
 import { useForm } from "react-hook-form"
-import { editPost } from "../actions/edit-post.action"
+import { editPost, publishPost, publishPost } from "../actions/edit-post.action"
 import { EditPostFormSchema, EditPostFormValues } from "./schema"
 import { PostResponseDto } from "../type"
 
 
 export default function EditPost({
-    post,
+  post,
 }: {
-    post: PostResponseDto
+  post: PostResponseDto
 }) {
   const editorRef = useRef<typeof ContentManager>(null)
 
   const {
     register,
     handleSubmit,
-    setValue, 
+    setValue,
     formState: { errors },
   } = useForm<EditPostFormValues>({
     resolver: zodResolver(EditPostFormSchema),
@@ -46,11 +46,14 @@ export default function EditPost({
     }
     handleSubmit(onSubmit)()
   }
+  const publishPost = async (postId: string) => {
+    const editPostResult = await publishPost(postId)
+  }
 
   return <div className="flex flex-col gap-5">
     <div className="flex justify-end gap-5">
-      <Button className="bg-gray-900 dark:bg-white dark:text-gray-900 text-white"onClick={handleSave}>Sauvegarder</Button>
-      <Button className="bg-gray-900 dark:bg-white dark:text-gray-900 text-white">Publier</Button>
+      <Button className="bg-gray-900 dark:bg-white dark:text-gray-900 text-white" onClick={handleSave}>Sauvegarder</Button>
+      <Button className="bg-gray-900 dark:bg-white dark:text-gray-900 text-white" onClick={() => publishPost(post.id)}>Publier</Button>
     </div>
     <UploadImages />
     <div>
@@ -64,7 +67,7 @@ export default function EditPost({
       )}
     </div>
 
-    <ContentManager  content={post.content ?? ''} viewer={false} ref={editorRef} />
+    <ContentManager content={post.content ?? ''} viewer={false} ref={editorRef} />
     {errors.content && (
       <p className="text-sm text-red-500">{errors.content.message}</p>
     )}
