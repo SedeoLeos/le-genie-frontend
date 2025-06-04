@@ -16,3 +16,11 @@ export const GetPaginatedPostsFormSchema = z.object({
   page: z.number(),
   limit: z.number(),
 })
+
+
+
+export const UpdatePostFormSchema = z.object({
+  id: z.string(),
+  status: z.string(),
+})
+export type UpdatePostFormValues = z.infer<typeof UpdatePostFormSchema>

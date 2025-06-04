@@ -3,7 +3,11 @@ import { fetchWithRetry } from '@/features/auth/actions/retry.action';
 import { Env } from '@/libs/Env';
 import { safeAction } from '@/libs/safe-action';
 import { returnValidationErrors } from 'next-safe-action';
-import { EditPostFormSchema, GetPostFormSchema } from '../edit-post/schema';
+import {
+    EditPostFormSchema,
+    GetPostFormSchema,
+    UpdatePostFormSchema,
+} from '../edit-post/schema';
 import { PostResponseDto } from '../type';
 
 export const editPost = safeAction
@@ -33,20 +37,21 @@ export const editPost = safeAction
         };
     });
 export const publishPost = safeAction
-    .inputSchema(GetPostFormSchema)
-    .action(async ({ parsedInput: { id } }) => {
+    .inputSchema(UpdatePostFormSchema)
+    .action(async ({ parsedInput: { id, status } }) => {
         const response = await fetchWithRetry(
-            `${Env.BOG_API_BASE_URL}posts/${id}`,
+            `${Env.BOG_API_BASE_URL}posts/${id}/status`,
             {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({ status }),
             }
         );
         const data = await response.json();
         if (!response.ok) {
-            return returnValidationErrors(GetPostFormSchema, {
+            return returnValidationErrors(UpdatePostFormSchema, {
                 _errors: ['Incorrect credentials'],
             });
         }
