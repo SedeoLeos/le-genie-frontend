@@ -5,7 +5,6 @@ import { PostResponseDto } from '../type'
 
 
 function PostView({ post }: { post: PostResponseDto|undefined }) {
-  console.log('post', post)
 
   return <div>
     <h1>{post?.title}</h1>

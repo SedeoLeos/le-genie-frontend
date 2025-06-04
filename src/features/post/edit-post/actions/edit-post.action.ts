@@ -16,7 +16,6 @@ export const editPost = safeAction.inputSchema(EditPostFormSchema).action(async 
     });
     const data = await response.json();
     if (!response.ok) {
-        console.log("data", data)
         return returnValidationErrors(EditPostFormSchema, { _errors: ["Incorrect credentials"] });
     }
     const post = data as PostResponseDto;

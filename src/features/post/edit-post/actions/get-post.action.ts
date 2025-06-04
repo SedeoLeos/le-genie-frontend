@@ -15,7 +15,7 @@ export const getPost = safeAction.inputSchema(GetPostFormSchema).action(async ({
     });
     const data = await response.json();
     if (!response.ok) {
-        console.log("data", data)
+
         return returnValidationErrors(GetPostFormSchema, { _errors: ["Incorrect credentials"] });
     }
     const post = data as PostResponseDto;
@@ -27,7 +27,6 @@ export const getPost = safeAction.inputSchema(GetPostFormSchema).action(async ({
 })
 
 export const getPaginatedPosts = async ({ page = 1, limit = 5 }: { page: number, limit: number }) => {
-    console.log("limit", page)
     const response = await fetch(`${Env.BOG_API_BASE_URL}posts?limit=${limit}&page=${page}`, {
         method: 'GET',
         headers: {
@@ -45,7 +44,6 @@ export const getPaginatedPosts = async ({ page = 1, limit = 5 }: { page: number,
         };
     }
     const posts = data as { items: PostResponseDto[], total: number, page: number, limit: number };
-    console.log("posts", posts)
     return {
         success: true,
         posts: posts.items,

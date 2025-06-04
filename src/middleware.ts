@@ -60,7 +60,6 @@ async function tryRefreshToken(refreshToken: string): Promise<NextResponse | nul
     });
 
     if (!refreshRes.ok) return null;
-    console.log("refreshRes",refreshRes);
 
     const { accessToken: newAccessToken, refreshToken: newRefreshToken } = await refreshRes.json();
     const response = NextResponse.next();

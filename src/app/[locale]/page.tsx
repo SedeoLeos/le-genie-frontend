@@ -1,10 +1,12 @@
 import Layout from "@/components/Layout/Layout";
 import Home from "@/features/landing/Home";
+import { getPaginatedPosts } from "@/features/post/edit-post/actions/get-post.action";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { posts } = await getPaginatedPosts({ page: 1, limit: 5 })
   return (
     <Layout hero sidebar>
-      <Home />
+      <Home posts={posts}  />
     </Layout>
   )
 }

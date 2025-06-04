@@ -16,7 +16,6 @@ export function WithPropLayout<T>({
     <>
       {React.Children.map(children, (child) => {
         if (isValidElement(child)) {
-          console.log("child", child);
           return cloneElement(child as ReactElement, {
             [propName]: data,
           });
