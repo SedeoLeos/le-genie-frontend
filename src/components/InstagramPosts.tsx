@@ -1,5 +1,6 @@
 
 import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
 
 const InstagramPosts = () => {
   const posts = [
@@ -36,9 +37,11 @@ const InstagramPosts = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {posts.map((post, index) => (
               <div key={index} className="aspect-square">
-                <img 
+                <Image
                   src={post} 
                   alt={`Instagram post ${index + 1}`}
+                  width={200}
+                  height={200}
                   className="w-full h-full object-cover rounded-lg hover:opacity-80 transition-opacity cursor-pointer"
                 />
               </div>

@@ -18,6 +18,16 @@ export default withSentryConfig(
             },
             poweredByHeader: false,
             reactStrictMode: true,
+            images: {
+                remotePatterns: [
+                    {
+                        protocol: 'https',
+                        hostname: 'images.unsplash.com',
+                        port: '',
+                        pathname: '/**',
+                    },
+                ],
+            },
         })
     ),
     {
@@ -29,7 +39,7 @@ export default withSentryConfig(
 
         // Only print logs for uploading source maps in CI
         silent: !process.env.CI,
-
+        
         // For all available options, see:
         // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
