@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { PostResponseDto } from './type';
 import PostItem from '@/components/PostItem';
 import { Link } from '@/libs/i18nNavigation';
-const PostListingWrapper = ({ page, posts, totalPages }: { page: number, posts: PostResponseDto[], totalPages: number }) => {
+const PostListingWrapper = ({ page, posts, totalPages, editMode = false }: { page: number, posts: PostResponseDto[], totalPages: number, editMode?: boolean }) => {
 
 
     return (
@@ -17,7 +17,7 @@ const PostListingWrapper = ({ page, posts, totalPages }: { page: number, posts: 
 
                 <div className="space-y-6">
                     {posts.map((post, index) => (
-                        <PostItem post={post} key={index} />
+                        <PostItem post={post} key={index} editMode={editMode} />
                     ))}
                 </div>
 

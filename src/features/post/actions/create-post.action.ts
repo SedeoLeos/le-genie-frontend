@@ -1,7 +1,8 @@
 'use server'
 import { fetchWithRetry } from "@/features/auth/actions/retry.action";
 import { Env } from "@/libs/Env";
-import { PostResponseDto } from "../../type";
+import { PostResponseDto } from "../type";
+
 
 export const createPost = async () => {
     const response = await fetchWithRetry(`${Env.BOG_API_BASE_URL}posts`, {

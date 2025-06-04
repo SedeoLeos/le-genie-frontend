@@ -1,5 +1,5 @@
 
-import { getPaginatedPosts } from "@/features/post/edit-post/actions/get-post.action";
+import { getPaginatedPosts } from "@/features/post/actions/get-post.action";
 import PostList from "@/features/post/PostList";
 type Props = {
     searchParams: {

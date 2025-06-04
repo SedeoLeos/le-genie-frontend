@@ -6,7 +6,7 @@ import UploadImages from "@/components/ui/upload-images"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRef } from "react"
 import { useForm } from "react-hook-form"
-import { editPost } from "./actions/edit-post.action"
+import { editPost } from "../actions/edit-post.action"
 import { EditPostFormSchema, EditPostFormValues } from "./schema"
 import { PostResponseDto } from "../type"
 

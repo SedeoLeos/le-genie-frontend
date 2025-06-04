@@ -4,7 +4,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useUser } from "@/features/auth/hooks/useAuth";
-import { createPost } from "../post/edit-post/actions/create-post.action";
+import { createPost } from "../post/actions/create-post.action";
 import { useRouter } from "@/libs/i18nNavigation";
 import { useState } from "react";
 

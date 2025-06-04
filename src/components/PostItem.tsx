@@ -9,10 +9,11 @@ import Image from "next/image";
 
 type PostItemProps = {
     post: PostResponseDto
+    editMode?: boolean
 }
-const PostItem = (props: PostItemProps) => {
-    const { post } = props;
-    return (<Link key={post.id} href={'/post/' + post.id} className="flex flex-col sm:flex-row bg-white dark:bg-gray-900  overflow-hidden">
+const PostItem = ({ post, editMode = false }: PostItemProps) => {
+
+    return (<Link key={post.id} href={'/post/' + post.id + (editMode ? '/edit' : '')} className="flex flex-col sm:flex-row bg-white dark:bg-gray-900  overflow-hidden">
         <div className="w-full sm:w-48 flex-shrink-0 overflow-hidden">
             {post.imagePath && <Image
                 src={post.imagePath}

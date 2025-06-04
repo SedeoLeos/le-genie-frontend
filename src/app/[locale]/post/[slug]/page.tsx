@@ -1,5 +1,5 @@
 
-import { getPost } from "@/features/post/edit-post/actions/get-post.action";
+import { getPost } from "@/features/post/actions/get-post.action";
 import PostView from "@/features/post/show-post/PostView"
 import { redirect } from "@/libs/i18nNavigation";
  async function PostDetailPage({ params }: { params: Promise<{ slug: string }> }) {

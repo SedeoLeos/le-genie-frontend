@@ -1,4 +1,4 @@
-import { getPost } from "@/features/post/edit-post/actions/get-post.action";
+import { getPost } from "@/features/post/actions/get-post.action";
 import EditPost from "@/features/post/edit-post/EditPost";
 import { redirect } from "@/libs/i18nNavigation";
 
