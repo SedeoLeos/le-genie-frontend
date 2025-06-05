@@ -4,6 +4,7 @@ import { Env } from "@/libs/Env";
 import { PostResponseDto } from "../type";
 
 
+
 export const createPost = async () => {
     const response = await fetchWithRetry(`${Env.BOG_API_BASE_URL}posts`, {
         method: 'POST',

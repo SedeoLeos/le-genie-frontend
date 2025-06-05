@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { PostResponseDto } from "@/features/post/type";
 import { Link } from "@/libs/i18nNavigation";
+import { slugify } from "@/libs/slugify";
 import { getTiptapTextFromJSON } from "@/libs/tiptap/util";
 import { Calendar, Eye } from "lucide-react";
 import Image from "next/image";
@@ -12,19 +13,16 @@ type PostItemProps = {
     editMode?: boolean
 }
 const PostItem = ({ post, editMode = false }: PostItemProps) => {
-
-    return (<Link key={post.id} href={'/post/' + post.id + (editMode ? '/edit' : '')} className="flex flex-col sm:flex-row bg-white dark:bg-gray-900  overflow-hidden">
+    const url = `/post/${post.id}/${editMode ? 'edit' : slugify(post.title)}`
+    return (<Link key={post.id} href={url} className="flex flex-col sm:flex-row bg-white dark:bg-gray-900  overflow-hidden">
         <div className="w-full sm:w-48 flex-shrink-0 overflow-hidden">
-            {post.imagePath && <Image
-                src={post.imagePath}
+            <Image
+                src={post.imagePath || '/landscape-placeholder-svgrepo-com.svg'}
                 alt={post.title}
-                fill
+                width={200}
+                height={200}
                 className="w-full h-48 sm:h-full object-cover"
-            />}
-
-            {!post.imagePath && <div
-                className="w-full h-48 sm:h-full object-cover bg-amber-50"
-            ></div>}
+            />
         </div>
         <div className="p-4 md:p-6 flex-1">
             {

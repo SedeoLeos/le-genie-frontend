@@ -2,14 +2,20 @@
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { useAtom } from "jotai"
+import { commentAtom } from "./PostView"
+import { JSX, SVGProps } from "react"
+import { Link } from "@/libs/i18nNavigation"
+import { Badge } from "@/components/ui/badge"
 
 export default function CommentList() {
+  const [{ comments, total, page, postId }] = useAtom(commentAtom)
   return (
     <div className="mx-auto px-4 md:px-6 max-w-2xl grid gap-8">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold">Comments</h2>
         <div className="flex items-center gap-2 text-muted-foreground">
-          <span>12 comments</span>
+          <span>{total} comments</span>
           <Separator orientation="vertical" />
           <Button variant="ghost" size="icon">
             <ListOrderedIcon className="w-5 h-5" />
@@ -17,76 +23,49 @@ export default function CommentList() {
         </div>
       </div>
       <div className="grid gap-6">
-        <div className="flex items-start gap-4">
-          <Avatar className="w-10 h-10 border">
-            <AvatarImage src="/placeholder-user.jpg" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2">
-              <div className="font-medium">Cody Nolan</div>
-              <div className="text-xs text-muted-foreground">2 days ago</div>
-            </div>
-            <div className="text-sm leading-relaxed text-muted-foreground">
-              Wow, this is an amazing product! I've been using it for a week now and it's been a game-changer. The setup
-              was super easy and the features are incredibly useful. Highly recommend!
-            </div>
-          </div>
-        </div>
-        <div className="flex items-start gap-4">
-          <Avatar className="w-10 h-10 border">
-            <AvatarImage src="/placeholder-user.jpg" alt="@shadcn" />
-            <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2">
-              <div className="font-medium">Jill Doe</div>
-              <div className="text-xs text-muted-foreground">1 week ago</div>
-            </div>
-            <div className="text-sm leading-relaxed text-muted-foreground">
-              I've been using this product for a few months now and it's been fantastic. The customer support has also
-              been incredibly responsive and helpful. Highly recommend!
+        {comments.map((comment) => (
+          <div key={comment.id} className="flex items-start gap-4">
+            <Avatar className="w-10 h-10 border">
+              <AvatarImage src={comment.user.avatarPath} alt="@shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div className="grid gap-2">
+              <div className="flex items-center gap-2">
+                <div className="font-medium">{comment.user.name}</div>
+                <div className="text-xs text-muted-foreground">2 days ago</div>
+              </div>
+              <div className="text-sm leading-relaxed text-muted-foreground">
+                {comment.content}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex items-start gap-4">
-          <Avatar className="w-10 h-10 border">
-            <AvatarImage src="/placeholder-user.jpg" alt="@shadcn" />
-            <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2">
-              <div className="font-medium">Alex Smith</div>
-              <div className="text-xs text-muted-foreground">3 weeks ago</div>
-            </div>
-            <div className="text-sm leading-relaxed text-muted-foreground">
-              I was a bit hesitant to try this product at first, but I'm so glad I did. It's been a game-changer for my
-              business. The features are incredibly useful and the user interface is intuitive. Highly recommend!
-            </div>
-          </div>
-        </div>
-        <div className="flex items-start gap-4">
-          <Avatar className="w-10 h-10 border">
-            <AvatarImage src="/placeholder-user.jpg" alt="@shadcn" />
-            <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2">
-              <div className="font-medium">Emily Parker</div>
-              <div className="text-xs text-muted-foreground">1 month ago</div>
-            </div>
-            <div className="text-sm leading-relaxed text-muted-foreground">
-              I've been using this product for a while now and it's been a game-changer for my workflow. The automation
-              features are incredibly useful and have saved me so much time. Highly recommend!
-            </div>
-          </div>
-        </div>
+        ))}
+      </div>
+
+      <div className='w-full py-5 flex items-center justify-center gap-10'>
+        {page > 1 && <Link href={`post/${postId}?page=${page - 1}`}>
+          <Badge
+            variant="outline"
+            className="border-gray-300 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-800 hover:text-white hover:border-gray-800 transition-colors cursor-pointer text-xs md:text-sm"
+
+          >⬅️ Précédent
+          </Badge>
+        </Link>}
+        {(page * 5) < total && <Link href={`post/${postId}?page=${page + 1}`}>
+
+          <Badge
+            variant="outline"
+            className="border-gray-300 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-800 hover:text-white hover:border-gray-800 transition-colors cursor-pointer text-xs md:text-sm"
+          >
+            Suivant ➡️
+          </Badge>
+        </Link>}
       </div>
     </div>
   )
 }
 
-function ListOrderedIcon(props) {
+function ListOrderedIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

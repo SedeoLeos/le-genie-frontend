@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import UploadImages from "@/components/ui/upload-images"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRef } from "react"
+import { Editor } from "@tiptap/react"
+import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { editPost, publishPost } from "../actions/edit-post.action"
+import { PostResponseDto, PostStatus } from "../type"
 import { EditPostFormSchema, EditPostFormValues } from "./schema"
-import { PostResponseDto } from "../type"
 
 
 export default function EditPost({
@@ -16,7 +16,8 @@ export default function EditPost({
 }: {
   post: PostResponseDto
 }) {
-  const editorRef = useRef<typeof ContentManager>(null)
+  const editorRef = useRef<{ editor: Editor | null }>(null)
+  const [selectedImage, setSelectedImage] = useState<File | null>(null)
 
   const {
     register,
@@ -33,29 +34,44 @@ export default function EditPost({
   })
 
   const onSubmit = async (data: EditPostFormValues) => {
-    const editPostResult = await editPost(data)
-    if (editPostResult.data?.success) {
+    const formData = new FormData()
+    formData.append("id", data.id)
+    formData.append("title", data.title)
+    formData.append("content", data.content)
+    formData.append("status", data.status)
+    if (selectedImage) {
+      formData.append("image", selectedImage)
+    }
+
+    const post = await fetch(`/api/posts/${data.id}`, {
+      method: "PATCH",
+      credentials: 'include',
+      body: formData,
+    })
+    if (post.ok) {
     }
   }
+  useEffect(() => {
+    console.log("selectedImage", selectedImage)
+  }, [selectedImage])
 
-
-  const handleSave = () => {
+  const handleSave = (status: PostStatus) => {
     const content = editorRef.current?.editor?.getJSON()
+    setValue("status", status)
     if (content) {
       setValue("content", JSON.stringify(content), { shouldValidate: true })
     }
-    handleSubmit(onSubmit)()
-  }
-  const handlepublishPost = async (postId: string) => {
-    const editPostResult = await publishPost({ id: postId, status: "" })
+    console.log("selectedImage", selectedImage)
+    handleSubmit((data) => onSubmit({ ...data, image: selectedImage } as EditPostFormValues))()
   }
 
   return <div className="flex flex-col gap-5">
     <div className="flex justify-end gap-5">
-      <Button className="bg-gray-900 dark:bg-white dark:text-gray-900 text-white" onClick={handleSave}>Sauvegarder</Button>
-      <Button className="bg-gray-900 dark:bg-white dark:text-gray-900 text-white" onClick={() => handlepublishPost(post.id)}>Publier</Button>
+      <Button className="bg-red-900 dark:bg-white dark:text-gray-900 text-white" onClick={() => handleSave("DRAFT")}>Draft</Button>
+      <Button className="bg-gray-900 dark:bg-white dark:text-gray-900 text-white" onClick={() => handleSave("PUBLISHED")}>Publier</Button>
+      <Button className="bg-gray-500 dark:bg-white dark:text-gray-900 text-white" onClick={() => handleSave("DRAFT")}>Brouillon</Button>
     </div>
-    <UploadImages />
+    <UploadImages url={post.imagePath} onImageChange={setSelectedImage} />
     <div>
       <Input
         {...register("title")}

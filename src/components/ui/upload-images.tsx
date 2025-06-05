@@ -5,11 +5,18 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import Image from "next/image"
 type UploadImagesProps = {
     onImageChange?: (file: File) => void;
+    url: string | null;
 };
 
-export default function UploadImages({ onImageChange }: UploadImagesProps) {
+export default function UploadImages({ onImageChange, url }: UploadImagesProps) {
+    console.log("url", url)
     const [file, setFile] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(url);
+    useEffect(() => {
+        if (url) {
+            setPreviewUrl(url);
+        }
+    }, [url]);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files && event.target.files[0];

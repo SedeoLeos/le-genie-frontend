@@ -1,6 +1,6 @@
 'use client'
 import * as React from "react"
-import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
+import { Editor, EditorContent, EditorContext, useEditor } from "@tiptap/react"
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
@@ -186,7 +186,7 @@ export type ContentManagerProps = {
   viewer?: boolean,
 
 }
-export const ContentManager = React.forwardRef(({ viewer = false, content }: ContentManagerProps, ref) => {
+export const ContentManager = React.forwardRef(({ viewer = false, content }: ContentManagerProps, ref: React.Ref<{ editor: Editor | null }>) => {
   const isMobile = useMobile()
   const windowSize = useWindowSize()
   const [mobileView, setMobileView] = React.useState<
@@ -199,7 +199,7 @@ export const ContentManager = React.forwardRef(({ viewer = false, content }: Con
   const editor = useEditor({
     immediatelyRender: false,
     editorProps: {
-      editable: (state) => !viewer,
+      editable: () => !viewer,
       attributes: {
         autocomplete: "off",
         autocorrect: "off",

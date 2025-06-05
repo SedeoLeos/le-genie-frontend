@@ -4,7 +4,8 @@ import { Env } from "@/libs/Env";
 import { safeAction } from "@/libs/safe-action";
 import { returnValidationErrors } from "next-safe-action";
 import { GetPostFormSchema } from "../edit-post/schema";
-import { PostResponseDto } from "../type";
+
+import { PaginationResponse, PostResponseDto } from "../type";
 
 
 export const getPost = safeAction.inputSchema(GetPostFormSchema).action(async ({ parsedInput: { id } }) => {
@@ -44,7 +45,7 @@ export const getPaginatedPosts = async ({ page = 1, limit = 5,mode }: { page: nu
             limit: 0,
         };
     }
-    const posts = data as { items: PostResponseDto[], total: number, page: number, limit: number };
+    const posts = data as PaginationResponse<PostResponseDto>;
     return {
         success: true,
         posts: posts.items,
@@ -53,3 +54,5 @@ export const getPaginatedPosts = async ({ page = 1, limit = 5,mode }: { page: nu
         limit: posts.limit,
     };
 }
+
+

@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { fetchWithRetry } from "./retry.action";
 import { Env } from "@/libs/Env";
-interface UserI {
+export interface UserI {
     id: string;
     email: string;
     name: string;

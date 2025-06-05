@@ -26,6 +26,12 @@ export default withSentryConfig(
                         port: '',
                         pathname: '/**',
                     },
+                    {
+                        protocol: 'https',
+                        hostname: 'play.min.io',
+                        port: '',
+                        pathname: '/**',
+                    },
                 ],
             },
         })
