@@ -4,7 +4,7 @@
 
 import * as Sentry from '@sentry/nextjs';
 import * as Spotlight from '@spotlightjs/spotlight';
-
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
 Sentry.init({
   // Sentry DSN
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
