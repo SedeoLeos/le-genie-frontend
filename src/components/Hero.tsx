@@ -2,7 +2,6 @@
 import { Badge } from '@/components/ui/badge';
 import FeaturedSection from './FeaturedSection';
 import { Calendar, Eye } from 'lucide-react';
-import { Separator } from './ui/separator';
 
 const Hero = () => {
   const popularPosts = [
@@ -20,13 +19,12 @@ const Hero = () => {
     }
   ];
   return (
-    <section className="bg-gray-900 dark:bg-white py-12 md:py-20 px-4 md:px-6 flex justify-center gap-10 ">
+    <section className="bg-gray-900 dark:bg-white py-12 md:py-20 px-4 md:px-6 flex justify-center gap-10 flex-col md:flex-row">
       <div className='max-w-[700px]'>
         <FeaturedSection />
       </div>
-      <Separator orientation="vertical" color='red' className='h-full w-1.5 bg-red-500' />
       {/* Popular Posted */}
-      <div className='min-w-80 '>
+      <div className='md:min-w-80 '>
         <div className="flex items-center mb-4">
           <Badge variant="secondary" className="text-white" style={{ backgroundColor: '#131A21' }}>Popular</Badge>
           <span className="ml-3 text-gray-900 font-semibold">Posted</span>

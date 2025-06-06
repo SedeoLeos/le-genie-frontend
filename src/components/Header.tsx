@@ -5,6 +5,7 @@ import EditIcon from './edit';
 import Logo from './ui/logo';
 import { useUser } from '@/features/auth/hooks/useAuth';
 import { Link, useRouter } from '@/libs/i18nNavigation';
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from './ui/navigation-menu';
 
 
 const Header = () => {
@@ -23,7 +24,7 @@ const Header = () => {
             <Link href="/" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Homepage</Link>
             <Link href="/post" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Posts</Link>
             <div className="relative">
-              <Link href="/post" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors flex items-center">
+              <Link href="/post" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors hidden md:flex items-center">
                 Categories
                 <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -43,13 +44,13 @@ const Header = () => {
           <Button variant="ghost" size="sm" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200">
             <Search className="text-gray-600 dark:text-white w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="sm" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200">
+          <Button variant="ghost" size="sm" className="hidden md:flex text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200">
             <EditIcon className="text-gray-600 dark:text-white w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="sm" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200">
+          <Button variant="ghost" size="sm" className="hidden md:flex text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200">
             Contact
           </Button>
-          <Button variant="ghost" size="sm" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200">
+          <Button variant="ghost" size="sm" className="hidden md:flex text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200">
             En
           </Button>
           <Bell className="w-5 h-5 text-gray-500 dark:text-white cursor-pointer hover:text-gray-900 dark:hover:text-gray-200 transition-colors" />
@@ -66,9 +67,21 @@ const Header = () => {
               Se connecter
             </Button>
           )}
-          <Button variant="ghost" size="sm" className="md:hidden">
-            <Menu className="w-5 h-5" />
-          </Button>
+          <NavigationMenu className="md:hidden">
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger><Menu className="w-5 h-5" /> </NavigationMenuTrigger>
+                <NavigationMenuContent className="flex flex-col p-2">
+                  <NavigationMenuLink>
+                    <Link href="/post" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Posts</Link>
+                  </NavigationMenuLink>
+                  <NavigationMenuLink>
+                    <Link href="/post" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Posts</Link>
+                  </NavigationMenuLink>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
       </div>
     </header>
