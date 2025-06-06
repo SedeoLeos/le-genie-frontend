@@ -32,6 +32,12 @@ export default withSentryConfig(
                         port: '',
                         pathname: '/**',
                     },
+                    {
+                        protocol: 'https',
+                        hostname: 'avatars.githubusercontent.com',
+                        port: '',
+                        pathname: '/**',
+                    },
                 ],
             },
         })
@@ -63,8 +69,6 @@ export default withSentryConfig(
         // side errors will fail.
         tunnelRoute: '/monitoring',
 
-        // Hides source maps from generated client bundles
-        hideSourceMaps: true,
 
         // Automatically tree-shake Sentry logger statements to reduce bundle size
         disableLogger: true,

@@ -4,13 +4,14 @@ import { getPaginatedPosts } from '@/features/post/actions/get-post.action';
 import PostListingWrapper from '@/features/post/PostListingWrapper'
 import React from 'react'
 type Props = {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
-  };
+  }>;
 };
 export default async function MePage({ searchParams }: Props) {
+  const searchParamsData = await searchParams;
   const limit = 5;
-  const page = Number(searchParams.page ?? "1");
+  const page = Number(searchParamsData.page ?? "1");
 
   const { posts, total } = await getPaginatedPosts({ page, limit, mode: 'me' });
   return (

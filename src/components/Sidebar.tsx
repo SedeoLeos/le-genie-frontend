@@ -1,24 +1,10 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
  import {  Instagram
   , Linkedin, Twitter } from 'lucide-react';
 
 const Sidebar = () => {
-  const popularPosts = [
-    {
-      title: "Design Is The Mix Of Emotions",
-      date: "23 December 2022",
-      readTime: "3 Min To Read",
-      category: "Design"
-    },
-    {
-      title: "Design Is The Mix Of Emotions",
-      date: "23 December 2022", 
-      readTime: "3 Min To Read",
-      category: "Design"
-    }
-  ];
-
   const authors = [
     {
       name: "Saba Gedeon",

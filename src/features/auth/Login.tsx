@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client'
 import { Button } from '@/components/ui/button'
 import Logo from '@/components/ui/logo'
@@ -13,7 +14,7 @@ function Login() {
   const [loadingProvider, setLoadingProvider] = React.useState<null | 'GOOGLE' | 'GITHUB'>(null);
   const { toast } = useToast();
   const router = useRouter();
-  const login = async (provider: 'GOOGLE' | 'GITHUB', code: string) => {
+  const login = React.useCallback(async (provider: 'GOOGLE' | 'GITHUB', code: string) => {
     const res = await createToken({ code, provider })
     if (res.data?.success) {
       router.push('/');
@@ -26,7 +27,7 @@ function Login() {
       description: res.validationErrors?._errors?.join(', ') || 'An error occurred.',
       variant: 'destructive',
     });
-  }
+  }, [router, toast]);
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
@@ -37,7 +38,7 @@ function Login() {
 
       });
     }
-  }, [router]);
+  }, [router, login]);
 
   function startOAuth(provider: 'GOOGLE' | 'GITHUB') {
     setLoadingProvider(provider);
@@ -115,7 +116,7 @@ function Login() {
       <div className="flex-1 flex  justify-center items-center p-10 ">
         <div className=' flex flex-col  justify-center items-center gap-5'>
           <p className='text-white dark:text-gray-900 text-3xl font-bold text-center'>
-            Fais moi confiance je n'ai <br /> pas besoin de ton mots de passe
+            Faites moi confiance je n'ai <br /> pas besoin de votre mot de passe
           </p>
           <div className='flex items-center gap-2'>
             <div className='min-w-10 min-h-10 dark:bg-gray-900 bg-white rounded-full'></div>
@@ -124,7 +125,7 @@ function Login() {
                 SLaega (Sedeo Leos)
               </span>
               <span className='text-white dark:text-gray-900  '>
-                founder of @slaega/validation & openfgaPlayground
+                founder of @slaega/validation & openfga/Playground
               </span>
             </div>
           </div>

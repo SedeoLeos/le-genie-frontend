@@ -15,7 +15,7 @@ type PostItemProps = {
 const PostItem = ({ post, editMode = false }: PostItemProps) => {
     const url = `/post/${post.id}/${editMode ? 'edit' : slugify(post.title)}`
     return (<Link key={post.id} href={url} className="flex flex-col sm:flex-row bg-white dark:bg-gray-900  overflow-hidden">
-        <div className="w-full sm:w-48 flex-shrink-0 overflow-hidden">
+        <div className="w-full h-48 sm:w-48 flex-shrink-0 overflow-hidden">
             <Image
                 src={post.imagePath || '/landscape-placeholder-svgrepo-com.svg'}
                 alt={post.title}
@@ -39,16 +39,36 @@ const PostItem = ({ post, editMode = false }: PostItemProps) => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 text-gray-500 dark:text-white text-sm mb-3">
                 {post.createdAt && <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-1" />
-                    {post.createdAt.toLocaleDateString()}
+                    {new Date(post.createdAt).toLocaleDateString()}
                 </div>}
-                {post.createdAt && <div className="flex items-center">
+                {post.updatedAt && <div className="flex items-center">
                     <Eye className="w-4 h-4 mr-1" />
-                    {post.createdAt.toLocaleDateString()}
+                    {new Date(post.updatedAt).toLocaleDateString()}
                 </div>}
+                <div className="space-y-4 p-3">
+                    {post.contributors && post.contributors[0] && post.contributors[0].user &&
+                        <div className="flex items-center space-x-5">
+                            <div className="w-5 h-5 bg-gray-200  rounded-full flex items-center justify-center relative">
+                                <Image
+                                    src={post.contributors[0].user.avatarPath || '/landscape-placeholder-svgrepo-com.svg'}
+                                    alt={post.contributors[0].user.name}
+                                    width={200}
+                                    height={200}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <div className="flex-1 space-y-1">
+                                <h4 className="text-gray-900 dark:text-white font-medium text-sm">{post.contributors[0].user.name}</h4>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
             <p className="text-gray-600 dark:text-white text-sm line-clamp-2">
                 {getTiptapTextFromJSON(post.content)}
             </p>
+
+
         </div>
     </Link>)
 }

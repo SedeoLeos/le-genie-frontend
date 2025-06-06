@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form"
 import { PostResponseDto, PostStatus } from "../type"
 import { EditPostFormSchema, EditPostFormValues } from "./schema"
 import { ContentManager } from '@/components/tiptap-content-manage/content-manage'
+import { useToast } from '@/hooks/use-toast'
 
 
 export default function EditPost({
@@ -19,6 +20,7 @@ export default function EditPost({
 }) {
   const editorRef = useRef<{ editor: Editor | null }>(null)
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const {
     register,
@@ -32,10 +34,14 @@ export default function EditPost({
       title: post.title,
       content: post.content,
       id: post.id,
+      image: post.imagePath,
     },
   })
 
+  const { toast } = useToast()
+
   const onSubmit = async (data: EditPostFormValues) => {
+    setIsLoading(true);
     const formData = new FormData()
     formData.append("id", data.id)
     formData.append("title", data.title)
@@ -45,18 +51,47 @@ export default function EditPost({
       formData.append("image", selectedImage)
     }
 
-    const postResponse = await fetch(`/api/posts/${data.id}`, {
-      method: "PATCH",
-      credentials: 'include',
-      body: formData,
-    })
-    if (postResponse.ok) {
-      const data = await postResponse.json() as PostResponseDto
-      setValue("status", data.status)
-      setValue("content", data.content)
-      setValue("title", data.title)
-      setValue("id", data.id)
-      setValue("image", data.imagePath)
+    try {
+      const postResponse = await fetch(`/api/posts/${data.id}`, {
+        method: "PATCH",
+        credentials: 'include',
+        body: formData,
+      })
+      if (postResponse.ok) {
+        const responseData = await postResponse.json() as PostResponseDto
+        setValue("status", responseData.status)
+        setValue("content", responseData.content)
+        setValue("title", responseData.title)
+        setValue("id", responseData.id)
+        setValue("image", responseData.imagePath)
+        toast({
+          title: "Post updated",
+          description: "Your post has been updated successfully.",
+          variant: "default",
+        })
+      } else {
+        let errorMessage = "An error occurred while updating the post.";
+        try {
+            const errorData = await postResponse.json();
+            errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch {
+            // Ignore if response is not JSON or other error
+        }
+        toast({
+          title: "Error updating post",
+          description: errorMessage,
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("Failed to submit post:", error);
+      toast({
+        title: "Network Error",
+        description: "A network error occurred or the server is unreachable. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -90,9 +125,27 @@ export default function EditPost({
 
   return <div className="flex flex-col gap-5">
     <div className="flex justify-end gap-5">
-      <Button className="bg-red-900 dark:bg-white dark:text-gray-900 text-white" onClick={() => handleSave("DRAFT")}>Draft</Button>
-      <Button className="bg-gray-900 dark:bg-white dark:text-gray-900 text-white" onClick={() => handleSave("PUBLISHED")}>Publier</Button>
-      <Button className="bg-gray-500 dark:bg-white dark:text-gray-900 text-white" onClick={() => handleSave("DRAFT")}>Brouillon</Button>
+      <Button
+        className="bg-red-900 dark:bg-white dark:text-gray-900 text-white"
+        onClick={() => handleSave("DRAFT")}
+        disabled={isLoading}
+      >
+        {isLoading ? "Saving..." : "Draft"}
+      </Button>
+      <Button
+        className="bg-gray-900 dark:bg-white dark:text-gray-900 text-white"
+        onClick={() => handleSave("PUBLISHED")}
+        disabled={isLoading}
+      >
+        {isLoading ? "Publishing..." : "Publier"}
+      </Button>
+      <Button
+        className="bg-gray-500 dark:bg-white dark:text-gray-900 text-white"
+        onClick={() => handleSave("DRAFT")}
+        disabled={isLoading}
+      >
+        {isLoading ? "Saving..." : "Brouillon"}
+      </Button>
     </div>
     <UploadImages url={getValues("image")} onImageChange={setSelectedImage} />
     <div>

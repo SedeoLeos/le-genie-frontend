@@ -12,6 +12,7 @@ import { commentAtom } from "./PostView"
 import { useToast } from "@/hooks/use-toast"
 
 export default function CommentForm({ postId }: { postId: string }) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setComments] = useAtom(commentAtom)
   const form = useForm<CommentPostFormValues>({
     resolver: zodResolver(CommentPostFormSchema),

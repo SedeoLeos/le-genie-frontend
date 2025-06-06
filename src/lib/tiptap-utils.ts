@@ -150,22 +150,32 @@ export const handleImageUpload = async (
             `File size exceeds maximum allowed (${MAX_FILE_SIZE / (1024 * 1024)}MB)`
         );
     }
-    let url: string ='';
-    // For demo/testing: Simulate upload progress
+    let url: string | null = null;
+
+    if (callback) {
+        try {
+            url = await callback(file);
+        } catch (error) {
+            console.error('Upload callback failed:', error);
+            // Optionally, rethrow or handle specific errors if needed
+            // For now, we'll fall through to use the placeholder
+        }
+    }
+
+    // If callback failed or was not provided, or returned no URL, use placeholder
+    if (!url) {
+        url = '/landscape-placeholder-svgrepo-com.svg';
+    }
+
+    // Simulate upload progress for the determined URL (actual or placeholder)
     for (let progress = 0; progress <= 100; progress += 10) {
         if (abortSignal?.aborted) {
+            // If the operation is aborted during progress simulation, 
+            // it implies the (real or simulated) upload should be considered cancelled.
             throw new Error('Upload cancelled');
         }
-        if (callback) {
-            const dataResult = await callback(file);
-            if (dataResult) url = dataResult;
-            url = '/landscape-placeholder-svgrepo-com.svg';
-            await new Promise((resolve) => setTimeout(resolve, 500));
-        }
-        if (!url) {
-            url = '/landscape-placeholder-svgrepo-com.svg';
-            await new Promise((resolve) => setTimeout(resolve, 500));
-        }
+        // Simulate delay for progress update
+        await new Promise((resolve) => setTimeout(resolve, 50)); // Reduced delay for faster simulation
         onProgress?.({ progress });
     }
 

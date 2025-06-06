@@ -24,7 +24,6 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (image instanceof File) {
     forwardData.append("imageFile", image)
   }
-  console.log(" ----",accessToken)
   const res = await fetch(`${Env.BOG_API_BASE_URL}posts/${id}`, {
     method: "PATCH",
     headers: {
