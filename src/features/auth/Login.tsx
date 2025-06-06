@@ -116,7 +116,7 @@ function Login() {
       <div className="flex-1 flex  justify-center items-center p-10 ">
         <div className=' flex flex-col  justify-center items-center gap-5'>
           <p className='text-white dark:text-gray-900 text-3xl font-bold text-center'>
-            Fais moi confiance je n'ai <br /> pas besoin de ton mots de passe
+            Faites moi confiance je n'ai <br /> pas besoin de votre mot de passe
           </p>
           <div className='flex items-center gap-2'>
             <div className='min-w-10 min-h-10 dark:bg-gray-900 bg-white rounded-full'></div>
@@ -125,7 +125,7 @@ function Login() {
                 SLaega (Sedeo Leos)
               </span>
               <span className='text-white dark:text-gray-900  '>
-                founder of @slaega/validation & openfgaPlayground
+                founder of @slaega/validation & openfga/Playground
               </span>
             </div>
           </div>
