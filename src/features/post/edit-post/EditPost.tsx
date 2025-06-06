@@ -1,14 +1,15 @@
 'use client'
-import { ContentManager } from "@/components/tiptap-templates/simple/simple-editor"
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import UploadImages from "@/components/ui/upload-images"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Editor } from "@tiptap/react"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { PostResponseDto, PostStatus } from "../type"
 import { EditPostFormSchema, EditPostFormValues } from "./schema"
+import { ContentManager } from '@/components/tiptap-content-manage/content-manage'
 
 
 export default function EditPost({
@@ -23,6 +24,7 @@ export default function EditPost({
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<EditPostFormValues>({
     resolver: zodResolver(EditPostFormSchema),
@@ -43,17 +45,39 @@ export default function EditPost({
       formData.append("image", selectedImage)
     }
 
-    const post = await fetch(`/api/posts/${data.id}`, {
+    const postResponse = await fetch(`/api/posts/${data.id}`, {
       method: "PATCH",
       credentials: 'include',
       body: formData,
     })
-    if (post.ok) {
+    if (postResponse.ok) {
+      const data = await postResponse.json() as PostResponseDto
+      setValue("status", data.status)
+      setValue("content", data.content)
+      setValue("title", data.title)
+      setValue("id", data.id)
+      setValue("image", data.imagePath)
     }
   }
-  useEffect(() => {
-    console.log("selectedImage", selectedImage)
-  }, [selectedImage])
+
+  const uploadFile = async (file: File) => {
+
+    const formData = new FormData()
+    formData.append("image", file)
+
+    const postId = getValues('id')
+    const postIamegeResponse = await fetch(`/api/posts/${postId}/images`, {
+      method: "POST",
+      credentials: 'include',
+      body: formData,
+    })
+    if (postIamegeResponse.ok) {
+      const data = await postIamegeResponse.json() as { url: string }
+      return data.url;
+    }
+    return null;
+  }
+
 
   const handleSave = (status: PostStatus) => {
     const content = editorRef.current?.editor?.getJSON()
@@ -71,7 +95,7 @@ export default function EditPost({
       <Button className="bg-gray-900 dark:bg-white dark:text-gray-900 text-white" onClick={() => handleSave("PUBLISHED")}>Publier</Button>
       <Button className="bg-gray-500 dark:bg-white dark:text-gray-900 text-white" onClick={() => handleSave("DRAFT")}>Brouillon</Button>
     </div>
-    <UploadImages url={post.imagePath} onImageChange={setSelectedImage} />
+    <UploadImages url={getValues("image")} onImageChange={setSelectedImage} />
     <div>
       <Input
         {...register("title")}
@@ -83,7 +107,7 @@ export default function EditPost({
       )}
     </div>
 
-    <ContentManager content={post.content ?? ''} viewer={false} ref={editorRef} />
+    <ContentManager content={getValues("content") ?? ''} viewer={false} ref={editorRef} callbackUpload={uploadFile} />
     {errors.content && (
       <p className="text-sm text-red-500">{errors.content.message}</p>
     )}

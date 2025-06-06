@@ -66,13 +66,13 @@ import { useWindowSize } from "@/hooks/use-window-size"
 import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
 
 // --- Components ---
-import { editorThemeAtom, ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle"
+import { editorThemeAtom, ThemeToggle } from "@/components/tiptap-content-manage/theme-toggle"
 
 // --- Lib ---
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 
 // --- Styles ---
-import "@/components/tiptap-templates/simple/simple-editor.scss"
+// import "@/components/tiptap-content-manage/cotent-manage.scss";
 
 import { useAtom } from "jotai"
 import { tryParseJSON } from "@/libs/tiptap/util"
@@ -184,9 +184,10 @@ const MobileToolbarContent = ({
 export type ContentManagerProps = {
   content: string,
   viewer?: boolean,
+  callbackUpload?: (file: File) => Promise<string | null>
 
 }
-export const ContentManager = React.forwardRef(({ viewer = false, content }: ContentManagerProps, ref: React.Ref<{ editor: Editor | null }>) => {
+export const ContentManager = React.forwardRef(({ viewer = false, content, callbackUpload }: ContentManagerProps, ref: React.Ref<{ editor: Editor | null }>) => {
   const isMobile = useMobile()
   const windowSize = useWindowSize()
   const [mobileView, setMobileView] = React.useState<
@@ -224,8 +225,9 @@ export const ContentManager = React.forwardRef(({ viewer = false, content }: Con
         accept: "image/*",
         maxSize: MAX_FILE_SIZE,
         limit: 3,
-        upload: handleImageUpload,
+        upload: (file, onProgress, abortSignal,) => handleImageUpload(file, onProgress, abortSignal, callbackUpload),
         onError: (error) => console.error("Upload failed:", error),
+
       }),
       TrailingNode,
       Link.configure({ openOnClick: false }),
