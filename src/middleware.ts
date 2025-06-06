@@ -12,6 +12,7 @@ const isProtectedRoute = createRouteMatcher([
   '/:locale/post/:post/edit',
   '/:locale/me(.*)',
 ]);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isAuthPage = createRouteMatcher(['/auth(.*)', '/:locale/auth(.*)']);
 
 export default async function middleware(request: NextRequest) {

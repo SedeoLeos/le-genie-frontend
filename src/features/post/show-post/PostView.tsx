@@ -13,6 +13,7 @@ function PostView(
   { post, comments: commentApi, total, page }:
     { post: PostResponseDto | undefined, comments: CommentPostResponseDto[], total: number, page: number }) {
   const editorRef = useRef<{ editor: Editor | null }>(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setComments] = useAtom(commentAtom)
 
   useEffect(() => {

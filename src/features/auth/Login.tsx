@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client'
 import { Button } from '@/components/ui/button'
 import Logo from '@/components/ui/logo'
@@ -13,7 +14,7 @@ function Login() {
   const [loadingProvider, setLoadingProvider] = React.useState<null | 'GOOGLE' | 'GITHUB'>(null);
   const { toast } = useToast();
   const router = useRouter();
-  const login = async (provider: 'GOOGLE' | 'GITHUB', code: string) => {
+  const login = React.useCallback(async (provider: 'GOOGLE' | 'GITHUB', code: string) => {
     const res = await createToken({ code, provider })
     if (res.data?.success) {
       router.push('/');
@@ -26,7 +27,7 @@ function Login() {
       description: res.validationErrors?._errors?.join(', ') || 'An error occurred.',
       variant: 'destructive',
     });
-  }
+  }, [router, toast]);
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
@@ -37,7 +38,7 @@ function Login() {
 
       });
     }
-  }, [router]);
+  }, [router, login]);
 
   function startOAuth(provider: 'GOOGLE' | 'GITHUB') {
     setLoadingProvider(provider);

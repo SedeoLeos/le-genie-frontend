@@ -1,19 +1,21 @@
+import { Content } from "@tiptap/react"
+
 type TiptapNode = {
     type: string
     content?: TiptapNode[]
     text?: string
   }
   
-  export function tryParseJSON(input: string): any {
+  export function tryParseJSON(input: string): Content | undefined {
     try {
       const parsed = JSON.parse(input)
       if (typeof parsed === 'string') {
         // Continue à parser récursivement si encore une string JSON
         return tryParseJSON(parsed)
       }
-      return parsed
+      return parsed as Content | undefined
     } catch {
-      return input // Si parse échoue, retourne la string originale
+      return input as Content | undefined
     }
   }
   
@@ -40,7 +42,7 @@ type TiptapNode = {
       return data.slice(0, maxLength) + (data.length > maxLength ? '…' : '')
     }
   
-    extractText(data)
+    extractText(data as TiptapNode)
   
     const trimmed = result.trim().slice(0, maxLength)
     return trimmed + (result.length > maxLength ? '…' : '')

@@ -1,7 +1,8 @@
 
 'use client'
-import { Calendar, Eye, MessageCircle } from 'lucide-react';
+import { Calendar, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
 
 const FeaturedSection = () => {
   const featuredPosts = [
@@ -42,10 +43,11 @@ const FeaturedSection = () => {
               <h3 className="text-lg md:text-xl font-bold dark:text-gray-900 text-white mb-3 line-clamp-2 min-h-[60px] max-h-[60px]">
                 {post.title}
               </h3>
-              <div className="relative">
-                <img
+              <div className="relative w-full h-48" >
+                <Image
                   src={post.image}
                   alt={post.title}
+                  fill
                   className="w-full h-48 md:h-64 object-cover"
                 />
               </div>
