@@ -32,6 +32,12 @@ export default withSentryConfig(
                         port: '',
                         pathname: '/**',
                     },
+                    {
+                        protocol: 'https',
+                        hostname: 'avatars.githubusercontent.com',
+                        port: '',
+                        pathname: '/**',
+                    },
                 ],
             },
         })

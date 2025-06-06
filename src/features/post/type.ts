@@ -23,10 +23,18 @@ export interface PostResponseDto {
     imagePath: string;
     content: string;
     status: PostStatus;
-    contributors: any[];
+    contributors: ContributorResponseDto[];
     postTags: any[];
     createdAt: Date;
     updatedAt: Date;
+}
+
+export interface ContributorResponseDto {
+    id: string;
+    postId: string;
+    userId: string;
+    owner: boolean;
+    user: UserI;
 }
 
 export type PostStatus = "EMPTY" | "DRAFT" | "PUBLISHED";
