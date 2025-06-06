@@ -72,7 +72,7 @@ import { editorThemeAtom, ThemeToggle } from "@/components/tiptap-content-manage
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 
 // --- Styles ---
-// import "@/components/tiptap-content-manage/cotent-manage.scss";
+import "@/components/tiptap-content-manage/cotent-managek.scss";
 
 import { useAtom } from "jotai"
 import { tryParseJSON } from "@/libs/tiptap/util"
