@@ -39,11 +39,11 @@ const PostItem = ({ post, editMode = false }: PostItemProps) => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 text-gray-500 dark:text-white text-sm mb-3">
                 {post.createdAt && <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-1" />
-                    {new Date(post.createdAt).toLocaleDateString()}
+                    {new Date(post.createdAt).toDateString()}
                 </div>}
                 {post.updatedAt && <div className="flex items-center">
                     <Eye className="w-4 h-4 mr-1" />
-                    {new Date(post.updatedAt).toLocaleDateString()}
+                    {new Date(post.updatedAt).toDateString()}
                 </div>}
                 <div className="space-y-4 p-3">
                     {post.contributors && post.contributors[0] && post.contributors[0].user &&
