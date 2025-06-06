@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { PostResponseDto } from './type';
 import PostItem from '@/components/PostItem';
 import { Link } from '@/libs/i18nNavigation';
-const PostListingWrapper = ({ page, posts, totalPages, editMode = false }: { page: number, posts: PostResponseDto[], totalPages: number, editMode?: boolean }) => {
+const PostListingWrapper = ({ page, posts, totalPages, editMode = false, source = 'post' }: { page: number, posts: PostResponseDto[], totalPages: number, editMode?: boolean, source?: 'me' | 'post' }) => {
 
 
     return (
@@ -23,7 +23,7 @@ const PostListingWrapper = ({ page, posts, totalPages, editMode = false }: { pag
 
 
                 <div className='w-full py-5 flex items-center justify-center gap-10'>
-                    {page > 1 && <Link href={`post/?page=${page - 1}`}>
+                    {page > 1 && <Link href={`${source}/?page=${page - 1}`}>
                         <Badge
                             variant="outline"
                             className="border-gray-300 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-800 hover:text-white hover:border-gray-800 transition-colors cursor-pointer text-xs md:text-sm"
@@ -31,7 +31,7 @@ const PostListingWrapper = ({ page, posts, totalPages, editMode = false }: { pag
                         >⬅️ Précédent
                         </Badge>
                     </Link>}
-                    {(page * 5) < totalPages && <Link href={`post/?page=${page + 1}`}>
+                    {(page * 5) < totalPages && <Link href={`${source}/?page=${page + 1}`}>
 
                         <Badge
                             variant="outline"

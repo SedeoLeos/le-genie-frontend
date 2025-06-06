@@ -16,7 +16,7 @@ export default async function MePage({ searchParams }: Props) {
   return (
     <Layout sidebar>
       <Profile />
-      <PostListingWrapper page={page} posts={posts} totalPages={total} editMode />
+      <PostListingWrapper page={page} posts={posts} totalPages={total} editMode source='me' />
     </Layout>
   )
 }
