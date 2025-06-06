@@ -8,6 +8,25 @@ import { JSX, SVGProps } from "react"
 import { Link } from "@/libs/i18nNavigation"
 import { Badge } from "@/components/ui/badge"
 
+function humanizeDate(dateString: string): string {
+  const now = new Date();
+  const date = new Date(dateString);
+  let diff = Math.floor((now.getTime() - date.getTime()) / 1000); // seconds
+
+  const days = Math.floor(diff / (3600 * 24));
+  diff -= days * 3600 * 24;
+  const hours = Math.floor(diff / 3600);
+  diff -= hours * 3600;
+  const minutes = Math.floor(diff / 60);
+
+  let result = "il y a ";
+  if (days > 0) result += days + (days === 1 ? " jour " : " jours ");
+  if (hours > 0) result += hours + (hours === 1 ? " heure " : " heures ");
+  if (days === 0 && hours === 0 && minutes > 0) result += minutes + (minutes === 1 ? " minute" : " minutes");
+  if (days === 0 && hours === 0 && minutes === 0) result = "à l'instant";
+  return result.trim();
+}
+
 export default function CommentList() {
   const [{ comments, total, page, postId }] = useAtom(commentAtom)
   return (
@@ -32,7 +51,7 @@ export default function CommentList() {
             <div className="grid gap-2">
               <div className="flex items-center gap-2">
                 <div className="font-medium">{comment.user.name}</div>
-                <div className="text-xs text-muted-foreground">2 days ago</div>
+                <div className="text-xs text-muted-foreground">{humanizeDate(comment.createdAt)}</div>
               </div>
               <div className="text-sm leading-relaxed text-muted-foreground">
                 {comment.content}
