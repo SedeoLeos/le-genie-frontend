@@ -15,7 +15,7 @@ type PostItemProps = {
 const PostItem = ({ post, editMode = false }: PostItemProps) => {
     const url = `/post/${post.id}/${editMode ? 'edit' : slugify(post.title)}`
     return (<Link key={post.id} href={url} className="flex flex-col sm:flex-row bg-white dark:bg-gray-900  overflow-hidden">
-        <div className="w-full sm:w-48 flex-shrink-0 overflow-hidden">
+        <div className="w-full h-48 sm:w-48 flex-shrink-0 overflow-hidden">
             <Image
                 src={post.imagePath || '/landscape-placeholder-svgrepo-com.svg'}
                 alt={post.title}

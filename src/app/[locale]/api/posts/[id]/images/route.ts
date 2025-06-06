@@ -40,7 +40,6 @@ export async function POST(
     },
     body: forwardData,
   })
-
-  const json: BackendApiResponse = await res.json() // Changed: Added type for json
+  const json: BackendApiResponse = await res.json()
   return NextResponse.json(json, { status: res.status })
 }
