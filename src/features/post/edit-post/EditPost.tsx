@@ -85,7 +85,6 @@ export default function EditPost({
     if (content) {
       setValue("content", JSON.stringify(content), { shouldValidate: true })
     }
-    console.log("selectedImage", selectedImage)
     handleSubmit((data) => onSubmit({ ...data, image: selectedImage } as EditPostFormValues))()
   }
 
