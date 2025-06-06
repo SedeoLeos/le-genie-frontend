@@ -21,14 +21,14 @@ const Header = () => {
 
           <nav className="hidden md:flex items-center space-x-6">
             <Link href="/" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Homepage</Link>
-            <a href="#" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors">About</a>
+            <Link href="/post" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Posts</Link>
             <div className="relative">
-              <a href="#" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors flex items-center">
+              <Link href="/post" className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors flex items-center">
                 Categories
                 <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
-              </a>
+              </Link>
             </div>
           </nav>
         </div>
