@@ -3,7 +3,7 @@ import { PostResponseDto } from "@/features/post/type";
 import { Link } from "@/libs/i18nNavigation";
 import { slugify } from "@/libs/slugify";
 import { getTiptapTextFromJSON } from "@/libs/tiptap/util";
-import { Calendar, Eye, Instagram, Linkedin, Twitter } from "lucide-react";
+import { Calendar, Eye } from "lucide-react";
 import Image from "next/image";
 
 
@@ -59,12 +59,6 @@ const PostItem = ({ post, editMode = false }: PostItemProps) => {
                             </div>
                             <div className="flex-1 space-y-1">
                                 <h4 className="text-gray-900 dark:text-white font-medium text-sm">{post.contributors[0].user.name}</h4>
-                                <div className="flex items-center space-x-3 text-xs text-gray-500 dark:text-white mt-1">
-
-                                    <Twitter className="w-2 h-2 text-gray-400 dark:text-white hover:text-white  cursor-pointer transition-colors" />
-                                    <Instagram className="w-2 h-2 text-gray-400 dark:text-white hover:text-white  cursor-pointer transition-colors" />
-                                    <Linkedin className="w-2 h-2 text-gray-400 dark:text-white hover:text-white  cursor-pointer transition-colors" />
-                                </div>
                             </div>
                         </div>
                     }
