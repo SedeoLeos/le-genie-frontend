@@ -8,26 +8,53 @@ import { GithubIcon, GlobeIcon } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { createToken } from './actions/createToken.action'
 import { useToast } from '@/hooks/use-toast'
-import { useRouter } from '@/libs/i18nNavigation'
+import { Link, useRouter } from '@/libs/i18nNavigation'
+import { useSearchParams } from 'next/navigation'
 let oauthWindow: Window | null = null;
 function Login() {
   const [loadingProvider, setLoadingProvider] = React.useState<null | 'GOOGLE' | 'GITHUB'>(null);
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const redirect = decodeURIComponent(searchParams.get('redirect') || '/');
+
+  useEffect(() => {
+    function handleMessage(event: MessageEvent) {
+      if (event.data.type === 'OAUTH_SUCCESS') {
+        router.push(redirect);
+      }
+      if (event.data.type === 'OAUTH_ERROR') {
+        toast({
+          title: 'Error',
+          description: event.data.message,
+          variant: 'destructive',
+        });
+        setLoadingProvider(null);
+      }
+    }
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [redirect, router, toast]);
+
   const login = React.useCallback(async (provider: 'GOOGLE' | 'GITHUB', code: string) => {
     const res = await createToken({ code, provider })
     if (res.data?.success) {
-      router.push('/');
+      if (window.opener) {
+        window.opener.postMessage({ type: 'OAUTH_SUCCESS' }, '*');
+        window.close();
+      }
       return;
+    }
+    if (window.opener) {
+      window.opener.postMessage({ type: 'OAUTH_ERROR', message: res.validationErrors?._errors?.join(', ') || 'An error occurred.' }, '*');
+      window.close();
     }
     const newUrl = window.location.origin + window.location.pathname;
     window.history.replaceState(null, '', newUrl);
-    toast({
-      title: 'Error',
-      description: res.validationErrors?._errors?.join(', ') || 'An error occurred.',
-      variant: 'destructive',
-    });
-  }, [router, toast]);
+
+  }, []);
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
@@ -38,7 +65,7 @@ function Login() {
 
       });
     }
-  }, [router, login]);
+  }, [router, login, redirect]);
 
   function startOAuth(provider: 'GOOGLE' | 'GITHUB') {
     setLoadingProvider(provider);
@@ -72,12 +99,10 @@ function Login() {
 
     if (oauthWindow && !oauthWindow.closed) {
       oauthWindow.focus();
-      // oauthWindow.location.href = oauthUrl; // force reload
+      oauthWindow.location.href = oauthUrl;
     } else {
       oauthWindow = window.open(oauthUrl, 'OAuthLogin', options);
     }
-    // Facultatif : tu peux remettre loadingProvider à null après un délai ou une action précise
-    // setTimeout(() => setLoadingProvider(null), 2000);
   }
 
   return (
@@ -109,6 +134,10 @@ function Login() {
               )}
               {loadingProvider === 'GITHUB' ? 'Connexion...' : 'Login with GitHub'}
             </Button>
+
+            <Link href="/" className='text-gray-900 dark:text-white  w-full py-8 text-lg font-bold cursor-pointer flex items-center justify-center gap-2'>
+              Passer
+            </Link>
           </div>
         </div>
 

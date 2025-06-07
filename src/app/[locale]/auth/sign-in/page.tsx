@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import Login from '@/features/auth/Login'
 
 function AuthPage() {
-  return <Login />
+  return <Suspense><Login /></Suspense>
 }
 
 export default AuthPage
