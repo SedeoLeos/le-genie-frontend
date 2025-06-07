@@ -50,9 +50,7 @@ export default async function middleware(request: NextRequest) {
         const redirectTo = encodeURIComponent(
             pathWithoutLocale + request.nextUrl.search
         );
-        console.log('pathWithoutLocale', pathWithoutLocale);
-        console.log('request.nextUrl.pathname', request.nextUrl.pathname);
-        console.log('localePrefix', localePrefix);
+
         const redirectUrl = new URL(`${locale}/auth/sign-in`, request.url);
         redirectUrl.searchParams.set('redirect', redirectTo);
         const res = NextResponse.redirect(redirectUrl);
