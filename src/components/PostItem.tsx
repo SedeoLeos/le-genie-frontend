@@ -6,6 +6,7 @@ import { slugify } from "@/libs/slugify";
 import { getTiptapTextFromJSON } from "@/libs/tiptap/util";
 import { Calendar, Eye } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 
 
@@ -14,17 +15,18 @@ type PostItemProps = {
     editMode?: boolean
 }
 const PostItem = ({ post, editMode = false }: PostItemProps) => {
+    const [isError, setIsError] = useState(false)
     const url = `/post/${post.id}/${editMode ? 'edit' : slugify(post.title)}`
     return (<Link key={post.id} href={url} className="flex flex-col sm:flex-row bg-white dark:bg-gray-900  overflow-hidden">
         <div className="w-full h-48 sm:w-48 flex-shrink-0 overflow-hidden">
             <Image
-                src={post.imagePath || '/landscape-placeholder-svgrepo-com.svg'}
+                src={isError && !post.imagePath ? '/landscape-placeholder-svgrepo-com.svg' : post.imagePath}
                 alt={post.title}
                 width={200}
                 height={200}
                 className="w-full h-48 sm:h-full object-cover"
-                onError={(e) => {
-                    e.currentTarget.src = '/landscape-placeholder-svgrepo-com.svg';
+                onError={() => {
+                    setIsError(true)
                 }}
             />
         </div>
