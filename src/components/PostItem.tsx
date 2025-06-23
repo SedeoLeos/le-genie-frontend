@@ -1,3 +1,4 @@
+'use client'
 import { Badge } from "@/components/ui/badge";
 import { PostResponseDto } from "@/features/post/type";
 import { Link } from "@/libs/i18nNavigation";
