@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useState } from "react";
 const ContributorImage = ({post}: {post: PostResponseDto}) => {
     const [isError, setIsError] = useState(false)
-    const placeholder = 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200&h=200&fit=crop'
+    const placeholder = '/placeholder.png'
     return <Image
     src={isError || !post.contributors[0].user.avatarPath ? placeholder : post.contributors[0].user.avatarPath}
     alt={post.contributors[0].user.name}
@@ -31,7 +31,7 @@ type PostItemProps = {
 }
 const PostItem = ({ post, editMode = false }: PostItemProps) => {
     const [isError, setIsError] = useState(false)
-  const placeholder = 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200&h=200&fit=crop'
+  const placeholder = '/placeholder.png'
 
     const url = `/post/${post.id}/${editMode ? 'edit' : slugify(post.title)}`
     return (<Link key={post.id} href={url} className="flex flex-col sm:flex-row bg-white dark:bg-gray-900  overflow-hidden">

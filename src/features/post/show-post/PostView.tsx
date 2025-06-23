@@ -16,7 +16,7 @@ function PostView(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setComments] = useAtom(commentAtom)
   const [isError, setIsError] = React.useState(false)
-  const placeholder = 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200&h=200&fit=crop'
+  const placeholder = '/placeholder.png'
 
   useEffect(() => {
     setComments(() => ({ page, total, comments: commentApi, postId: post?.id ?? '' }))
