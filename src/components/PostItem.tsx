@@ -7,7 +7,22 @@ import { getTiptapTextFromJSON } from "@/libs/tiptap/util";
 import { Calendar, Eye } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-
+const ContributorImage = ({post}: {post: PostResponseDto}) => {
+    const [isError, setIsError] = useState(false)
+    const placeholder = 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200&h=200&fit=crop'
+    return <Image
+    src={isError || !post.contributors[0].user.avatarPath ? placeholder : post.contributors[0].user.avatarPath}
+    alt={post.contributors[0].user.name}
+    onError={() => {
+        setIsError(true)
+    }}
+    placeholder='blur'
+    blurDataURL={placeholder}
+    width={200}
+    height={200}
+    className="w-full h-full object-cover"
+/>
+}
 
 
 type PostItemProps = {
@@ -16,11 +31,15 @@ type PostItemProps = {
 }
 const PostItem = ({ post, editMode = false }: PostItemProps) => {
     const [isError, setIsError] = useState(false)
+  const placeholder = 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200&h=200&fit=crop'
+
     const url = `/post/${post.id}/${editMode ? 'edit' : slugify(post.title)}`
     return (<Link key={post.id} href={url} className="flex flex-col sm:flex-row bg-white dark:bg-gray-900  overflow-hidden">
         <div className="w-full h-48 sm:w-48 flex-shrink-0 overflow-hidden">
             <Image
-                src={isError && !post.imagePath ? '/landscape-placeholder-svgrepo-com.svg' : post.imagePath}
+                src={isError || !post.imagePath ? placeholder : post.imagePath}
+                placeholder='blur'
+                blurDataURL={placeholder}
                 alt={post.title}
                 width={200}
                 height={200}
@@ -55,13 +74,7 @@ const PostItem = ({ post, editMode = false }: PostItemProps) => {
                     {post.contributors && post.contributors[0] && post.contributors[0].user &&
                         <div className="flex items-center space-x-5">
                             <div className="w-5 h-5 bg-gray-200  rounded-full flex items-center justify-center relative">
-                                <Image
-                                    src={post.contributors[0].user.avatarPath || '/landscape-placeholder-svgrepo-com.svg'}
-                                    alt={post.contributors[0].user.name}
-                                    width={200}
-                                    height={200}
-                                    className="w-full h-full object-cover"
-                                />
+                                <ContributorImage post={post} />
                             </div>
                             <div className="flex-1 space-y-1">
                                 <h4 className="text-gray-900 dark:text-white font-medium text-sm">{post.contributors[0].user.name}</h4>

@@ -15,6 +15,8 @@ function PostView(
   const editorRef = useRef<{ editor: Editor | null }>(null)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setComments] = useAtom(commentAtom)
+  const [isError, setIsError] = React.useState(false)
+  const placeholder = 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200&h=200&fit=crop'
 
   useEffect(() => {
     setComments(() => ({ page, total, comments: commentApi, postId: post?.id ?? '' }))
@@ -31,7 +33,12 @@ function PostView(
       {editorRef.current && <Image
         className='object-cover' alt={post.title}
         fill
-        src={post.imagePath || '/landscape-placeholder-svgrepo-com.svg'}
+        onError={() => {
+          setIsError(true)
+        }}
+        placeholder='blur'
+        blurDataURL={placeholder}
+        src={isError || !post.imagePath ? placeholder : post.imagePath}
       />}
 
     </div>
