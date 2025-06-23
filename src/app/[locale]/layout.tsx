@@ -9,6 +9,7 @@ import { routing } from '@/libs/i18nNavigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { Provider } from "jotai";
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
   subsets: ["latin"],
@@ -76,9 +77,11 @@ export default async function RootLayout(
         <PostHogProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <TooltipProvider>
-              {props.children}
-              <Toaster />
-              <Sonner />
+              <Provider>
+                {props.children}
+                <Toaster />
+                <Sonner />
+              </Provider>
             </TooltipProvider>
           </NextIntlClientProvider>
         </PostHogProvider>

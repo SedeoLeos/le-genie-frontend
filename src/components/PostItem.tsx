@@ -22,6 +22,9 @@ const PostItem = ({ post, editMode = false }: PostItemProps) => {
                 width={200}
                 height={200}
                 className="w-full h-48 sm:h-full object-cover"
+                onError={(e) => {
+                    e.currentTarget.src = '/landscape-placeholder-svgrepo-com.svg';
+                }}
             />
         </div>
         <div className="p-4 md:p-6 flex-1">

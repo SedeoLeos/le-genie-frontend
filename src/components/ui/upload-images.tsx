@@ -11,10 +11,12 @@ type UploadImagesProps = {
 export default function UploadImages({ onImageChange, url }: UploadImagesProps) {
     console.log("url", url)
     const [file, setFile] = useState<File | null>(null);
+    const [error, setError] = useState<boolean>(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(url);
     useEffect(() => {
         if (url) {
             setPreviewUrl(url);
+            setError(false);
         }
     }, [url]);
 
@@ -24,6 +26,7 @@ export default function UploadImages({ onImageChange, url }: UploadImagesProps) 
             setFile(selectedFile);
             if (selectedFile.type.startsWith('image/')) {
                 setPreviewUrl(URL.createObjectURL(selectedFile));
+                setError(false);
                 if (onImageChange) onImageChange(selectedFile);
             } else {
                 setPreviewUrl(null);
@@ -53,13 +56,16 @@ export default function UploadImages({ onImageChange, url }: UploadImagesProps) 
                         htmlFor="dropzone-file"
                         className="relative flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                     >
-                        {previewUrl ? (
+                        {!error && previewUrl ? (
                             <Image
                                 src={previewUrl}
                                 alt={file?.name || 'preview'}
                                 fill
                                 className="object-cover rounded shadow border border-gray-200"
                                 style={{ zIndex: 1 }}
+                                onError={() => {
+                                    setError(true);
+                                }}
                             />
                         ) : (
                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
